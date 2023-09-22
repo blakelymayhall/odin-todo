@@ -1,0 +1,108 @@
+body, p, ul {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style-type: none;
+}
+
+@font-face {
+    font-family: 'TitleFont';
+    src: url('fonts/Handlee-Regular.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+#mainContainer {
+    display: grid;
+    width: 100vw;
+    height: 100vh;
+    grid-template-columns: 18vw 82vw;
+    grid-template-rows: 10vh 90vh;
+}
+
+#sideBar {
+    background: rgb(24, 109, 24);
+    border: medium solid black;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+
+#sideBar #mainTitle {
+    font-size: 2rem;
+    font-family: 'TitleFont';
+    font-weight: 800;
+    width: 100%;
+    min-width: 195px;
+    text-align: center;
+    margin: 20px 0;
+    text-decoration: underline;
+}
+
+#categoryListTitle {
+    margin: 10px 15px;
+    font-family: 'TitleFont';
+    font-size: 1.4rem;
+    text-decoration: underline;
+}
+
+#categoryList {
+    margin: 0px 15px;
+}
+
+.categoryRow {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'TitleFont';
+    font-size: 1.2rem;
+}
+
+#editCategoryButton {
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+}
+
+.seperator {
+    height: 1px;
+    width: 100%;
+    background: black;
+}
+
+#addCategoryButton {
+    height: 1.5rem;
+    width: auto;
+    object-fit: cover;
+    display: block;
+    margin-left: auto; 
+    margin-top: 5px;
+    margin-right: 4px;
+}
+
+#toolBar {
+    background: rgb(228, 209, 147);
+    border: medium solid black;
+    border-left: none;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#board {
+    background-image: url("imgs/josephine-bredehoft-KsAo8ouBn8A-unsplash.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: medium solid black;
+    border-left: none;
+    border-top: none;
+}
+
+/*{
+  <a target="_blank" href="https://icons8.com/icon/flyFkP7sj07V/settings">Settings</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>  
+}*/
