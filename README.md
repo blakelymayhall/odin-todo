@@ -19,5 +19,9 @@ Repo for the todo list project in the javascript course of the Odin Project
 
 ### Progress
 
-9/21/23
-- Begin implementing html to achieve above "macro" design -- revisit freeform for subdesigns (forms for entry, on-click todo)
+9/21/23-9/24/23
+- Implementing html to achieve above "macro" design -- revisit freeform for subdesigns (forms for entry, on-click todo)
+
+
+Ideas to Implement:
+- Choose color of category
