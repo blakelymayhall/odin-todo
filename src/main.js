@@ -1,24 +1,17 @@
-import { initPageLoad, addNewCategoryToDOM } from "./index";
-import { Todo, Category } from './todo_manager';
+import { DomManager } from "./index";
+import { Manager, Todo, Category } from './todo_manager';
 import "./style/styles.css";
 
-// Load image assets 
-initPageLoad();
+const manager = Manager();
+const domManager = DomManager();
+domManager.addCategoryToDOM(manager.addCategory("Default"));
+domManager.addTodoToDOM(manager.addTodo("Click Me!","","",manager.getCategoryByName("Default"),false));
 
-function updateCategories() {
-    categories = [];
-    const categoryRows = document.querySelectorAll("[data-category]");
-    categoryRows.forEach((row) => {
-        categories.push(row.dataset.category);
-    });
-}
-
-let categories = [];
-let todos = [];
-
-// Buttons that toggle the player config form
 const addCategoryButton = document.querySelector("#addCategoryButton");
 addCategoryButton.addEventListener("click", () => {
-    addNewCategoryToDOM(addCategoryButton);
+    domManager.getNewUserCategory(manager);
 });
 
+var intervalId = setInterval(function() {
+    console.log(manager.todos);
+  }, 5000);

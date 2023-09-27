@@ -10,10 +10,107 @@ import Pushpin from "../src/imgs/icons8-push-pin-50.png";
 import TodoEditButton from "../src/imgs/icons8-edit-50.png";
 import TodoCategory from "../src/imgs/icons8-ghost-50.png"
 
-import { Category } from "./todo_manager";
+// Export Functions
+const DomManager = () => {
+    
+    loadImageAssets();
 
+    const addCategoryToDOM = (category) => {
+        const categoryRow = document.createElement("li");
+        categoryRow.classList.add("categoryRow");
+        categoryRow.dataset.category = category;
+        const categoryName = document.createElement("p");
+        categoryName.textContent = category.name;
+        const editCategoryButton = document.createElement("img");
+        editCategoryButton.src = EditCategoryButton;
+        editCategoryButton.classList.add("editCategoryButton");
+        categoryRow.appendChild(categoryName);
+        categoryRow.appendChild(editCategoryButton);
+        const seperator = document.createElement("li");
+        seperator.classList.add("seperator");
+        const addCategoryButton = document.querySelector("#addCategoryButton");
+        document.querySelector("#categoryList").insertBefore(categoryRow,addCategoryButton);
+        document.querySelector("#categoryList").insertBefore(seperator,addCategoryButton);
+    };
+
+    const addTodoToDOM = (todo) => {
+        const todoNote = document.createElement("div");
+        todoNote.classList.add("todoNote");
+        const pushpin = document.createElement("img");
+        pushpin.src = Pushpin;
+        pushpin.classList.add("pushpin");
+        const todoContent = document.createElement("div");
+        todoContent.classList.add("todoContent");
+        const todoTitleRow = document.createElement("div");
+        todoTitleRow.classList.add("todoTitleRow");
+        const todoTitle = document.createElement("p");
+        todoTitle.classList.add("todoTitle");
+        todoTitle.textContent = "Todo:";
+        const todoTitleContent = document.createElement("p");
+        todoTitleContent.classList.add("todoTitleContent");
+        todoTitleContent.textContent = todo.name;
+        const todoEditButton = document.createElement("img");
+        todoEditButton.classList.add("todoEditButton");
+        todoEditButton.src = TodoEditButton;
+        const todoDateRow = document.createElement("div");
+        todoDateRow.classList.add("todoDateRow");
+        const todoDateTitle = document.createElement("p");
+        todoDateTitle.classList.add("todoDateTitle");
+        todoDateTitle.textContent = "Due Date:";
+        const todoDateContent = document.createElement("p");
+        todoDateContent.classList.add("todoDateContent");
+        todoDateContent.textContent = "Today @ 8:00PM CST";
+        const todoCategory = document.createElement("img");
+        todoCategory.classList.add("todoCategory");
+        todoCategory.src = TodoCategory;
+
+        todoNote.appendChild(pushpin);
+        todoTitleRow.appendChild(todoTitle);
+        todoTitleRow.appendChild(todoTitleContent);
+        todoContent.appendChild(todoTitleRow);
+        todoContent.appendChild(todoEditButton);
+        todoDateRow.appendChild(todoDateTitle);
+        todoDateRow.appendChild(todoDateContent);
+        todoContent.appendChild(todoDateRow);
+        todoContent.appendChild(todoCategory);
+        todoNote.appendChild(todoContent);
+
+        document.querySelector("#board").appendChild(todoNote);
+    };
+    
+    const getNewUserCategory = (manager) =>  {
+        const addCategoryButton = document.querySelector("#addCategoryButton");
+        addCategoryButton.style.display = "none";
+        const newCategoryNameForm = document.createElement("form");
+        newCategoryNameForm.setAttribute("id", "newCategoryNameForm");
+        const newCategoryName = document.createElement("input");
+        newCategoryName.setAttribute("id", "newCategoryName");
+        newCategoryName.type="text";
+        newCategoryName.minlength="2";
+        newCategoryName.maxlength="20";
+        newCategoryNameForm.appendChild(newCategoryName);
+        newCategoryNameForm.addEventListener("submit", (formSubmit) => {
+            formSubmit.preventDefault();
+            if(validCategoryInput()) {
+                const name = document.forms.newCategoryNameForm["newCategoryName"].value;
+                addCategoryToDOM(manager.addCategory(name));
+                newCategoryNameForm.parentElement.removeChild(newCategoryNameForm);
+                addCategoryButton.style.display = "block";
+            }
+        });
+        document.querySelector("#categoryList").insertBefore(newCategoryNameForm,addCategoryButton);
+    }
+
+    return {
+        addCategoryToDOM,
+        addTodoToDOM,
+        getNewUserCategory
+    }
+};
+
+
+// Support Functions
 function loadImageAssets() {
-    document.querySelector(".editCategoryButton").src = EditCategoryButton;
     document.querySelector("#addCategoryButton").src = AddCategoryButton;
     document.querySelector("#addToDoButton").src = AddToDoButton;
     document.querySelector("#filterButton").src = FilterButton;
@@ -21,18 +118,7 @@ function loadImageAssets() {
     document.querySelector("#searchIcon").src = SearchIcon;
     document.querySelector("#helpButton").src = HelpButton;
     document.querySelector("#settingsButton").src = SettingsButton;
-    document.querySelector(".pushpin").src = Pushpin;
-    document.querySelector(".todoEditButton").src = TodoEditButton;
-    document.querySelector(".todoCategory").src = TodoCategory;
-
 };
-
-const initPageLoad = () => {
-    loadImageAssets();
-    // presumembly this will do more
-    // maybe change this export type to export 
-    // multiple functions at that point?
-}
 
 function validCategoryInput() {
     const newCategoryName = document.forms.newCategoryNameForm["newCategoryName"].value;
@@ -43,38 +129,6 @@ function validCategoryInput() {
     return invalidForm;
 }
 
-function addNewCategoryToDOM(addCategoryButton) {
-    // turn off add button
-    addCategoryButton.style.display = "none";
-
-    // prompt user for category name, then append the new category if vaild name
-    // and turn back on the add button
-    const newCategoryNameForm = document.createElement("form");
-    newCategoryNameForm.setAttribute("id", "newCategoryNameForm");
-    const newCategoryName = document.createElement("input");
-    newCategoryName.setAttribute("id", "newCategoryName");
-    newCategoryName.type="text";
-    newCategoryName.minlength="2";
-    newCategoryName.maxlength="20";
-    newCategoryNameForm.appendChild(newCategoryName);
-    newCategoryNameForm.addEventListener("submit", (formSubmit) => {
-        formSubmit.preventDefault();
-        if(validCategoryInput()) {
-            const name = document.forms.newCategoryNameForm["newCategoryName"].value;
-            const category = document.querySelector(".categoryRow").cloneNode(true);
-            category.dataset.category=Category(name);
-            category.children[0].textContent = name;
-            const seperator = document.querySelector(".seperator").cloneNode(true);
-            document.querySelector("#categoryList").insertBefore(category,addCategoryButton);
-            document.querySelector("#categoryList").insertBefore(seperator,addCategoryButton);
-            newCategoryNameForm.parentElement.removeChild(newCategoryNameForm);
-            addCategoryButton.style.display = "block";
-        }
-    });
-    document.querySelector("#categoryList").insertBefore(newCategoryNameForm,addCategoryButton);
-}
-
 export { 
-    initPageLoad,
-    addNewCategoryToDOM
+    DomManager
 };

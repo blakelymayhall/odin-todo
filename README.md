@@ -22,7 +22,7 @@ Repo for the todo list project in the javascript course of the Odin Project
 9/21/23-9/24/23
 - Implementing html to achieve above "macro" design -- revisit freeform for subdesigns (forms for entry, on-click todo)
 
-9/24/23-
+9/24/23-9/25/23
 - Finished the HTML/CSS design, now work on implementing into JS and using webpack
 - Got the assets and the shell organized how I'd like... now break into chunks and decide how to implement 
 
@@ -53,5 +53,11 @@ Repo for the todo list project in the javascript course of the Odin Project
     - A running list of both of the above objects - main.js
     - A DOM manipulator - index.js
 
-Ideas to Implement:
-- Choose color of category, change the background of the sticky
+- Got most of the above implemented. Running out of steam, need to re-group on priorities.
+
+9/26/23-
+- Work Item:
+    - Choose color of category, change the background of the sticky
+        - Randomly genned within the category object on creation
+    - Add todo form 
+    - Enforce name uniqueness in category creation
