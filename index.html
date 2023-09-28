@@ -31,7 +31,23 @@
             </div>
         </div>
         <div id="board">
-
+            <form id="newTodoOverlay">
+                <p>Add New Todo:</p>
+                <label for="inputBookTitle">Enter Title:</label>
+                <input type="text" id="inputBookTitle" name="inputBookTitle">
+                <label for="inputBookAuthor">Enter Author's Name:</label>
+                <input type="text" id="inputBookAuthor" name="inputBookAuthor">
+                <label for="inputNoPages">Enter # of Pages:</label>
+                <input type="number" id="inputNoPages" name="inputNoPages">
+                <div>
+                    <label for="inputHaveRead">Already Read?</label>
+                    <input type="checkbox" id="inputHaveRead" name="inputHaveRead">
+                </div>
+                <div>
+                    <button type="button" class="closeForm">Close</button>
+                    <button type="button" class="confirmForm">Confirm</button>
+                </div>
+            </form>
         </div>
     </div>
 </body>
