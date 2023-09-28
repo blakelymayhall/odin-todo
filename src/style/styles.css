@@ -17,7 +17,7 @@ ul {
     display: grid;
     width: 100vw;
     height: 100vh;
-    grid-template-columns: 18vw 82vw;
+    grid-template-columns: max(18vw,260px) 82vw;
     grid-template-rows: 10vh 90vh;
 }
 
@@ -36,7 +36,7 @@ ul {
     font-family: 'TitleFont';
     font-weight: 800;
     width: 100%;
-    min-width: 195px;
+    min-width: 260px;
     text-align: center;
     margin: 20px 0;
     text-decoration: underline;
@@ -62,10 +62,22 @@ ul {
     font-size: 1.2rem;
 }
 
-.editCategoryButton {
+.categroyRowImages {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 10px;
+}
+
+.editCategoryButton, .categoryRowCategoryIcon {
     height: 80%;
     width: auto;
     object-fit: cover;
+}
+
+.categoryRowCategoryIcon {
+    filter: invert(100%);
 }
 
 .seperator {
@@ -77,6 +89,7 @@ ul {
 #newCategoryName {
     background: rgb(49, 104, 49);
     color: whitesmoke;
+    width: 90%;
 }
 
 #addCategoryButton {
@@ -124,7 +137,7 @@ ul {
 }
 
 .toolBarButton {
-    height: 70%;
+    height: 50%;
     width: auto;
     object-fit: cover;
 }
@@ -145,6 +158,24 @@ ul {
     padding-top: 50px;
     padding-bottom: 50px;
     gap: 5%;
+}
+
+#newTodoOverlay {
+    position: absolute;
+    background:rgb(228, 209, 147);
+    z-index: 1;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 25px;
+    width: 30vw;
+    height: 40vh;
+    margin-top: 10vh;
+    margin-left: 17vw;
+    display: flex;
+    flex-direction: column;
+    padding: 1% 3% 2%;
+    gap: 2%;
 }
 
 .todoNote {

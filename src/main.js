@@ -1,5 +1,5 @@
 import { DomManager } from "./index";
-import { Manager, Todo, Category } from './todo_manager';
+import { Manager } from './todo_manager';
 import "./style/styles.css";
 
 const manager = Manager();
@@ -9,7 +9,12 @@ domManager.addTodoToDOM(manager.addTodo("Click Me!","","",manager.getCategoryByN
 
 const addCategoryButton = document.querySelector("#addCategoryButton");
 addCategoryButton.addEventListener("click", () => {
-    domManager.getNewUserCategory(manager);
+    domManager.getNewCategory(manager);
+});
+
+const addTodoButton = document.querySelector("#addToDoButton");
+addTodoButton.addEventListener("click", () => {
+    domManager.getNewTodo(manager);
 });
 
 var intervalId = setInterval(function() {

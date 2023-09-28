@@ -57,7 +57,8 @@ Repo for the todo list project in the javascript course of the Odin Project
 
 9/26/23-
 - Work Item:
-    - Choose color of category, change the background of the sticky
-        - Randomly genned within the category object on creation
     - Add todo form 
     - Enforce name uniqueness in category creation
+
+- Quality:
+    - Enforce unable to make new category if exceed numbr of images/colors

@@ -21,11 +21,18 @@ const DomManager = () => {
         categoryRow.dataset.category = category;
         const categoryName = document.createElement("p");
         categoryName.textContent = category.name;
+        const categroyRowImages = document.createElement("div");
+        categroyRowImages.classList.add("categroyRowImages");
+        const categoryRowCategoryIcon = document.createElement("img");
+        categoryRowCategoryIcon.src = category.symbol;
+        categoryRowCategoryIcon.classList.add("categoryRowCategoryIcon");
         const editCategoryButton = document.createElement("img");
         editCategoryButton.src = EditCategoryButton;
         editCategoryButton.classList.add("editCategoryButton");
+        categroyRowImages.appendChild(categoryRowCategoryIcon);
+        categroyRowImages.appendChild(editCategoryButton);
         categoryRow.appendChild(categoryName);
-        categoryRow.appendChild(editCategoryButton);
+        categoryRow.appendChild(categroyRowImages);
         const seperator = document.createElement("li");
         seperator.classList.add("seperator");
         const addCategoryButton = document.querySelector("#addCategoryButton");
@@ -36,6 +43,7 @@ const DomManager = () => {
     const addTodoToDOM = (todo) => {
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
+        todoNote.style.background=todo.category.color;
         const pushpin = document.createElement("img");
         pushpin.src = Pushpin;
         pushpin.classList.add("pushpin");
@@ -62,7 +70,7 @@ const DomManager = () => {
         todoDateContent.textContent = "Today @ 8:00PM CST";
         const todoCategory = document.createElement("img");
         todoCategory.classList.add("todoCategory");
-        todoCategory.src = TodoCategory;
+        todoCategory.src = todo.category.symbol;
 
         todoNote.appendChild(pushpin);
         todoTitleRow.appendChild(todoTitle);
@@ -77,14 +85,15 @@ const DomManager = () => {
 
         document.querySelector("#board").appendChild(todoNote);
     };
-    
-    const getNewUserCategory = (manager) =>  {
+
+    const getNewCategory = (manager) =>  {
         const addCategoryButton = document.querySelector("#addCategoryButton");
         addCategoryButton.style.display = "none";
         const newCategoryNameForm = document.createElement("form");
         newCategoryNameForm.setAttribute("id", "newCategoryNameForm");
         const newCategoryName = document.createElement("input");
         newCategoryName.setAttribute("id", "newCategoryName");
+        newCategoryName.autofocus=true;
         newCategoryName.type="text";
         newCategoryName.minlength="2";
         newCategoryName.maxlength="20";
@@ -101,10 +110,15 @@ const DomManager = () => {
         document.querySelector("#categoryList").insertBefore(newCategoryNameForm,addCategoryButton);
     }
 
+    const getNewTodo = (manager) => {
+
+    };
+
     return {
         addCategoryToDOM,
         addTodoToDOM,
-        getNewUserCategory
+        getNewCategory,
+        getNewTodo
     }
 };
 
