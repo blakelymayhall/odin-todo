@@ -10,7 +10,7 @@ import WineCategory from "../src/imgs/category_imgs/icons8-drink-50.png";
 const Manager = () => {
     const categoryImages = [GhostCategory,ShoeCategory,ToyCategory,CarCategory,BookCategory,DogCategory,WineCategory];
     let availableCategoryImages = categoryImages;   // do we need the first variable? if a cat. is deleted we could push onto here?
-    const categoryColors = ["Aqua","Aquamarine","BurlyWood","LightGray","PowderBlue","DeepPink","HoneyDew"]
+    const categoryColors = ["Aqua","Aquamarine","BurlyWood","LightGray","PowderBlue","Yellow","HoneyDew"]
     let availableCategoryColors = categoryColors;
 
     let categories = [];
@@ -31,6 +31,12 @@ const Manager = () => {
         });
     }
 
+    const getCategoryByID = (id) => {
+        return categories.find( (category) => {
+            return category.categoryID == id;
+        });
+    }
+
     const addTodo = (name, desc, dueDate, category) => {
         let newTodo = Todo(name, desc, dueDate, category, false);
         todos.push(newTodo);
@@ -42,7 +48,8 @@ const Manager = () => {
         todos,
         addCategory,
         addTodo,
-        getCategoryByName
+        getCategoryByName,
+        getCategoryByID
     }
 }
 

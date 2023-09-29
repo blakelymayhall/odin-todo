@@ -62,3 +62,4 @@ Repo for the todo list project in the javascript course of the Odin Project
 
 - Quality:
     - Enforce unable to make new category if exceed numbr of images/colors
+    - Fix name v. title in todo and category uses

@@ -168,14 +168,46 @@ ul {
     border-style: solid;
     border-width: 2px;
     border-radius: 25px;
-    width: 30vw;
-    height: 40vh;
+    width: 400px;
+    height: fit-content;
     margin-top: 10vh;
     margin-left: 17vw;
-    display: flex;
+    display: none;
     flex-direction: column;
     padding: 1% 3% 2%;
-    gap: 2%;
+    font-family:'TitleFont';
+    box-shadow: 2px -2px black;
+}
+
+#newTodoOverlay label, #newTodoButtonRow {
+    padding-top: 10px;
+}
+
+#newTodoHeader {
+    font-size: 2rem;
+    text-decoration: underline;
+}
+
+#newTodoDescription {
+    height: 100px;
+    resize: none;
+}
+
+#inputTodoDueDate {
+    width: fit-content;
+}
+
+#newTodoButtonRow {
+    display: flex;
+    justify-content: space-between;
+}
+
+#newTodoCloseForm, #newTodoConfirmForm, #newTodoCategory {
+    width: 100px;
+}
+
+#newTodoCategory {
+    width: 150px;
 }
 
 .todoNote {
@@ -215,3 +247,4 @@ ul {
 .todoDateRow {
     margin-top: 5px;
 }
+

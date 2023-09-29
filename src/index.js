@@ -8,7 +8,7 @@ import HelpButton from "../src/imgs/icons8-help-50.png";
 import SettingsButton from "../src/imgs/icons8-settings-96.png";
 import Pushpin from "../src/imgs/icons8-push-pin-50.png";
 import TodoEditButton from "../src/imgs/icons8-edit-50.png";
-import TodoCategory from "../src/imgs/icons8-ghost-50.png"
+import {isTomorrow, isToday, format } from "date-fns";
 
 // Export Functions
 const DomManager = () => {
@@ -67,7 +67,16 @@ const DomManager = () => {
         todoDateTitle.textContent = "Due Date:";
         const todoDateContent = document.createElement("p");
         todoDateContent.classList.add("todoDateContent");
-        todoDateContent.textContent = "Today @ 8:00PM CST";
+        if (isToday(todo.dueDate)) {
+            todoDateContent.textContent = "Today @ ";
+        }
+        else if (isTomorrow(todo.dueDate)) {
+            todoDateContent.textContent = "Tomorrow @ ";
+        }
+        else {
+            todoDateContent.textContent = format(todo.dueDate, "eeee, MMM d @ ");
+        }
+        todoDateContent.textContent = todoDateContent.textContent + format(todo.dueDate, "h:m a");
         const todoCategory = document.createElement("img");
         todoCategory.classList.add("todoCategory");
         todoCategory.src = todo.category.symbol;
@@ -111,7 +120,47 @@ const DomManager = () => {
     }
 
     const getNewTodo = (manager) => {
+        document.querySelector("#newTodoOverlay").style.display = "flex";
 
+        // Disable buttons (make a function for this)
+        document.querySelector("#addCategoryButton").style.pointerEvents = "none";
+
+        manager.categories.forEach( (category) => {
+            const categoryOption = document.createElement("option");
+            categoryOption.value=category.categoryID;
+            categoryOption.text=category.name;
+            document.querySelector("#newTodoCategory").appendChild(categoryOption);
+        });
+
+        const closeButton = document.querySelector("#newTodoCloseForm");
+        closeButton.addEventListener("click", () => {
+            document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
+            document.querySelector("#newTodoOverlay").style.display = "none";
+            document.forms.newTodoOverlay.reset();
+            const toDelete = document.querySelectorAll("#newTodoCategory option")
+            toDelete.forEach((e) => {
+                e.parentElement.removeChild(e);
+            });
+        });
+
+        const submitButton = document.querySelector("#newTodoConfirmForm");
+        submitButton.addEventListener("click", () => {
+            if(validTodoInput()) {
+                const newTodoName = document.forms.newTodoOverlay["newTodoTitle"].value;
+                const newTodoDescription = document.forms.newTodoOverlay["newTodoDescription"].value;
+                const newTodoDueDate = new Date(document.forms.newTodoOverlay["newTodoDueDate"].value);
+                const newTodoCategory = manager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
+                addTodoToDOM(manager.addTodo(newTodoName,newTodoDescription,newTodoDueDate,newTodoCategory));
+
+                document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
+                document.querySelector("#newTodoOverlay").style.display = "none";
+                document.forms.newTodoOverlay.reset();
+                const toDelete = document.querySelectorAll("#newTodoCategory option")
+                toDelete.forEach((e) => {
+                    e.parentElement.removeChild(e);
+                });
+            }
+        });
     };
 
     return {
@@ -141,7 +190,28 @@ function validCategoryInput() {
       alert("Names must be between 2 and 12 characters");
     }
     return invalidForm;
-}
+};
+
+function validTodoInput() {
+    // the second time the form is submitted the fields arent right
+    const newTodoName = document.forms.newTodoOverlay["newTodoTitle"].value;
+    const validName = newTodoName.length > 2 && newTodoName.length < 12; 
+    if (!validName) {
+        console.log(newTodoName);
+      alert("Names must be between 2 and 12 characters");
+      return false;
+    }
+
+    const newTodoDueDate = document.forms.newTodoOverlay["newTodoDueDate"].value;
+    const validDate = newTodoDueDate != "" && newTodoDueDate != null && 
+        new Date(newTodoDueDate) > new Date(); // Check against current date
+    if (!validDate) {
+      alert("Date must be future date");
+      return false;
+    }
+
+    return true;
+};
 
 export { 
     DomManager
