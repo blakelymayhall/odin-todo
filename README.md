@@ -55,11 +55,17 @@ Repo for the todo list project in the javascript course of the Odin Project
 
 - Got most of the above implemented. Running out of steam, need to re-group on priorities.
 
-9/26/23-
-- Work Item:
-    - Add todo form 
-    - Enforce name uniqueness in category creation
+9/26/23-9/29/23
+- Added todo input form  
+- Add category icon randomization 
+- Add category color randomization
+- Add functions to add the categories and todos to DOM so that the defult category isn't hardcoded in
+- Add due date functionality 
 
-- Quality:
-    - Enforce unable to make new category if exceed numbr of images/colors
-    - Fix name v. title in todo and category uses
+
+Todo:
+- Enforce name uniqueness in category creation
+
+Quality:
+- Enforce unable to make new category if exceed numbr of images/colors
+- Fix name v. title in todo and category uses
