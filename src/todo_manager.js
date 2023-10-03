@@ -5,6 +5,7 @@ import CarCategory from "../src/imgs/category_imgs/icons8-car-50.png";
 import BookCategory from "../src/imgs/category_imgs/icons8-book-50.png";
 import DogCategory from "../src/imgs/category_imgs/icons8-dog-50.png";
 import WineCategory from "../src/imgs/category_imgs/icons8-drink-50.png";
+import {isTomorrow, isToday, format } from "date-fns";
 
 // Export Functions
 const Manager = () => {
@@ -37,6 +38,12 @@ const Manager = () => {
         });
     }
 
+    const getTodoByID = (id) => {
+        return todos.find( (todo) => {
+            return todo.todoID == id;
+        });
+    }
+
     const addTodo = (name, desc, dueDate, category) => {
         let newTodo = Todo(name, desc, dueDate, category, false);
         todos.push(newTodo);
@@ -49,17 +56,36 @@ const Manager = () => {
         addCategory,
         addTodo,
         getCategoryByName,
-        getCategoryByID
+        getCategoryByID,
+        getTodoByID
     }
 }
 
 const Todo = (name, desc, dueDate, category, status) => {
     const todoID = genID();
+
+    const GetFormattedDate = () => {
+        let formattedDate;
+
+        if (isToday(dueDate)) {
+            formattedDate = "Today @ ";
+        }
+        else if (isTomorrow(dueDate)) {
+            formattedDate = "Tomorrow @ ";
+        }
+        else {
+            formattedDate = format(dueDate, "eeee, MMM d @ ");
+        }
+        
+        formattedDate = formattedDate + format(dueDate, "h:m a");
+        return formattedDate;
+    };
+
     return {
         todoID,
         name,
         desc,
-        dueDate,
+        GetFormattedDate,
         category,
         status
     }

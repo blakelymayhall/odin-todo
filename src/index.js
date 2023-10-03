@@ -8,7 +8,6 @@ import HelpButton from "../src/imgs/icons8-help-50.png";
 import SettingsButton from "../src/imgs/icons8-settings-96.png";
 import Pushpin from "../src/imgs/icons8-push-pin-50.png";
 import TodoEditButton from "../src/imgs/icons8-edit-50.png";
-import {isTomorrow, isToday, format } from "date-fns";
 
 // Export Functions
 const DomManager = () => {
@@ -18,7 +17,7 @@ const DomManager = () => {
     const addCategoryToDOM = (category) => {
         const categoryRow = document.createElement("li");
         categoryRow.classList.add("categoryRow");
-        categoryRow.dataset.category = category;
+        categoryRow.dataset.categoryID = category.categoryID;
         const categoryName = document.createElement("p");
         categoryName.textContent = category.name;
         const categroyRowImages = document.createElement("div");
@@ -44,6 +43,7 @@ const DomManager = () => {
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
         todoNote.style.background=todo.category.color;
+        todoNote.dataset.todoID = todo.todoID;
         const pushpin = document.createElement("img");
         pushpin.src = Pushpin;
         pushpin.classList.add("pushpin");
@@ -67,16 +67,7 @@ const DomManager = () => {
         todoDateTitle.textContent = "Due Date:";
         const todoDateContent = document.createElement("p");
         todoDateContent.classList.add("todoDateContent");
-        if (isToday(todo.dueDate)) {
-            todoDateContent.textContent = "Today @ ";
-        }
-        else if (isTomorrow(todo.dueDate)) {
-            todoDateContent.textContent = "Tomorrow @ ";
-        }
-        else {
-            todoDateContent.textContent = format(todo.dueDate, "eeee, MMM d @ ");
-        }
-        todoDateContent.textContent = todoDateContent.textContent + format(todo.dueDate, "h:m a");
+        todoDateContent.textContent = todo.GetFormattedDate();
         const todoCategory = document.createElement("img");
         todoCategory.classList.add("todoCategory");
         todoCategory.src = todo.category.symbol;
@@ -163,11 +154,23 @@ const DomManager = () => {
         });
     };
 
+    const showFullTodo = (manager, todoDOM) => {
+        const todo = manager.getTodoByID(todoDOM.dataset.todoID);
+        document.querySelector("#todoFullOverlay").style.display = "flex";
+        document.querySelector("#todoFullOverlay").style.background = todo.category.color;
+        document.querySelector("#todoFullName").textContent = todo.name;
+        document.querySelector("#todoFullDate").textContent = todo.GetFormattedDate();
+        document.querySelector("#todoFullDescription").textContent = todo.desc;
+        document.querySelector("#todoFullCategory").textContent = todo.category.name;
+        document.querySelector("#todoFullCategoryImg").src = todo.category.symbol;
+    };
+
     return {
         addCategoryToDOM,
         addTodoToDOM,
         getNewCategory,
-        getNewTodo
+        getNewTodo,
+        showFullTodo
     }
 };
 

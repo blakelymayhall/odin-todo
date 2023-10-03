@@ -193,7 +193,7 @@ ul {
     resize: none;
 }
 
-#inputTodoDueDate {
+#newTodoDueDate {
     width: fit-content;
 }
 
@@ -208,6 +208,72 @@ ul {
 
 #newTodoCategory {
     width: 150px;
+}
+
+#todoFullOverlay {
+    position: absolute;
+    z-index: 1;
+    background: red;
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    width: 400px;
+    aspect-ratio: 317 / 147;
+    height: auto;
+    margin-top: 10vh;
+    margin-left: 17vw;
+    display: none;
+    flex-direction: column;
+    padding: 1% 3% 2%;
+    font-family:'TitleFont';
+    box-shadow: 2px -2px black;    
+}
+
+#todoFullOverlayTopRow {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    width: 100%;
+    gap: 5px;
+}
+
+#todoFullOverlayCloseButton {
+    position: absolute;
+    border-style: solid;
+    border-color: black;
+    background: red;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    top: -5%;
+    right: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+}
+
+.todoFullHeader {
+    text-decoration: underline;
+    font-size: 1.3rem;
+    margin-top: 15px;
+}
+
+.todoFullContent {
+    margin: 5px 0;
+}
+
+#todoFullCategoryRow {
+    display: flex;
+    align-items: center;
+    gap: 5%;
+}
+
+#todoFullCategoryRow img {
+    height: 60%;
+    width: auto;
+    object-fit: cover;
 }
 
 .todoNote {

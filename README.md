@@ -61,11 +61,27 @@ Repo for the todo list project in the javascript course of the Odin Project
 - Add category color randomization
 - Add functions to add the categories and todos to DOM so that the defult category isn't hardcoded in
 - Add due date functionality 
+- Added git ignore 
 
+10/2/23
+- Make todo's clickable and bring up the information
 
 Todo:
-- Enforce name uniqueness in category creation
+- Add completed button to the todo's and the nav bar
+- Make todo's editable 
+- Make categories editable
+- Make data persist
+- Help button
+- Sort functionality
+- Filter functionality
+- Search functionality
+- Add settings to the page settings 
+    - Clear data
 
 Quality:
+- Move the form event listeners to the main.js script with the document.eventlistener strategy
 - Enforce unable to make new category if exceed numbr of images/colors
 - Fix name v. title in todo and category uses
+- Enforce name uniqueness in category creation (?)
+- Consider splitting up index js into one for todo, category
+- If due date is passed, make red 

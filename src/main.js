@@ -17,6 +17,14 @@ addTodoButton.addEventListener("click", () => {
     domManager.getNewTodo(manager);
 });
 
+document.addEventListener("click", (e) => {
+    const target = e.target.closest(".todoNote");
+    if(target) {
+        console.log(target);
+        domManager.showFullTodo(manager, target);
+    };
+});
+
 var intervalId = setInterval(function() {
     console.log(manager.todos);
   }, 5000);
