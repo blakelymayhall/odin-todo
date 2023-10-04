@@ -66,9 +66,13 @@ Repo for the todo list project in the javascript course of the Odin Project
 10/2/23
 - Make todo's clickable and bring up the information
 
+10/3/23
+- Add close button functionality to the full todo view
+- Add completed button to the todo's
+- Add edit test form
+
 Todo:
-- Add completed button to the todo's and the nav bar
-- Make todo's editable 
+- Finish todo's editable 
 - Make categories editable
 - Make data persist
 - Help button
@@ -79,6 +83,8 @@ Todo:
     - Clear data
 
 Quality:
+- Issue with making a second todo - form validation
+    - Think its because you are adding additional event listners. move to main.js
 - Move the form event listeners to the main.js script with the document.eventlistener strategy
 - Enforce unable to make new category if exceed numbr of images/colors
 - Fix name v. title in todo and category uses

@@ -85,6 +85,7 @@ const Todo = (name, desc, dueDate, category, status) => {
         todoID,
         name,
         desc,
+        dueDate,
         GetFormattedDate,
         category,
         status

@@ -160,7 +160,7 @@ ul {
     gap: 5%;
 }
 
-#newTodoOverlay {
+#newTodoOverlay, #editTodoOverlay {
     position: absolute;
     background:rgb(228, 209, 147);
     z-index: 1;
@@ -179,34 +179,35 @@ ul {
     box-shadow: 2px -2px black;
 }
 
-#newTodoOverlay label, #newTodoButtonRow {
+#newTodoOverlay label, #newTodoButtonRow, #editTodoOverlay label, #editTodoButtonRow{
     padding-top: 10px;
 }
 
-#newTodoHeader {
+#newTodoHeader, #editTodoHeader {
     font-size: 2rem;
     text-decoration: underline;
 }
 
-#newTodoDescription {
+#newTodoDescription, #editTodoDescription {
     height: 100px;
     resize: none;
 }
 
-#newTodoDueDate {
+#newTodoDueDate, #editTodoDueDate {
     width: fit-content;
 }
 
-#newTodoButtonRow {
+#newTodoButtonRow, #editTodoButtonRow {
     display: flex;
     justify-content: space-between;
 }
 
-#newTodoCloseForm, #newTodoConfirmForm, #newTodoCategory {
+#newTodoCloseForm, #newTodoConfirmForm, #newTodoCategory, 
+#editTodoCloseForm, #editTodoConfirmForm, #editTodoCategory {
     width: 100px;
 }
 
-#newTodoCategory {
+#newTodoCategory, #editTodoCategory {
     width: 150px;
 }
 
@@ -254,6 +255,10 @@ ul {
     color: white;
 }
 
+#todoFullOverlayCloseButton:hover {
+    cursor: pointer;
+}
+
 .todoFullHeader {
     text-decoration: underline;
     font-size: 1.3rem;
@@ -276,6 +281,10 @@ ul {
     object-fit: cover;
 }
 
+#editTodoOverlay {
+    display: none;
+}
+
 .todoNote {
     width: 100%;
     height: 100%;
@@ -295,19 +304,53 @@ ul {
 .todoContent {
     display: grid;
     grid-template-columns: 80% 20%;
-    grid-template-rows: 50% 50%;
+    grid-template-rows: 30% 30% 30%;
     padding-left: 15px;
 }
 
-.todoTitle, .todoDateTitle {
+.todoTitle {
     text-decoration: underline;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+} 
+
+.todoDateTitle {
+    text-decoration: underline;
+    margin-top: 10px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
 }
 
-.todoEditButton, .todoCategory{
-    height: 60%;
+.todoEditButton, .todoCategory, .todoCheckButton {
+    height: 70%;
     width: auto;
     object-fit: cover;
-    margin: 5px;
+    margin-top: -10px;
+}
+
+.todoEditButton {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.todoCategory {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+.todoCheckButton {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
 }
 
 .todoDateRow {

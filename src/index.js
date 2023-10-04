@@ -8,6 +8,7 @@ import HelpButton from "../src/imgs/icons8-help-50.png";
 import SettingsButton from "../src/imgs/icons8-settings-96.png";
 import Pushpin from "../src/imgs/icons8-push-pin-50.png";
 import TodoEditButton from "../src/imgs/icons8-edit-50.png";
+import CheckMark from "../src/imgs/icons8-check-mark-50.png";
 
 // Export Functions
 const DomManager = () => {
@@ -57,6 +58,9 @@ const DomManager = () => {
         const todoTitleContent = document.createElement("p");
         todoTitleContent.classList.add("todoTitleContent");
         todoTitleContent.textContent = todo.name;
+        const todoCheckButton = document.createElement("img");
+        todoCheckButton.classList.add("todoCheckButton");
+        todoCheckButton.src = CheckMark;
         const todoEditButton = document.createElement("img");
         todoEditButton.classList.add("todoEditButton");
         todoEditButton.src = TodoEditButton;
@@ -76,6 +80,7 @@ const DomManager = () => {
         todoTitleRow.appendChild(todoTitle);
         todoTitleRow.appendChild(todoTitleContent);
         todoContent.appendChild(todoTitleRow);
+        todoContent.appendChild(todoCheckButton);
         todoContent.appendChild(todoEditButton);
         todoDateRow.appendChild(todoDateTitle);
         todoDateRow.appendChild(todoDateContent);
@@ -136,13 +141,13 @@ const DomManager = () => {
 
         const submitButton = document.querySelector("#newTodoConfirmForm");
         submitButton.addEventListener("click", () => {
-            if(validTodoInput()) {
-                const newTodoName = document.forms.newTodoOverlay["newTodoTitle"].value;
-                const newTodoDescription = document.forms.newTodoOverlay["newTodoDescription"].value;
-                const newTodoDueDate = new Date(document.forms.newTodoOverlay["newTodoDueDate"].value);
-                const newTodoCategory = manager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
-                addTodoToDOM(manager.addTodo(newTodoName,newTodoDescription,newTodoDueDate,newTodoCategory));
+            const newTodoName = document.forms.newTodoOverlay["newTodoTitle"].value;
+            const newTodoDescription = document.forms.newTodoOverlay["newTodoDescription"].value;
+            const newTodoDueDate = new Date(document.forms.newTodoOverlay["newTodoDueDate"].value);
+            const newTodoCategory = manager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
 
+            if(validTodoInput(newTodoName, newTodoDueDate)) {
+                addTodoToDOM(manager.addTodo(newTodoName,newTodoDescription,newTodoDueDate,newTodoCategory));
                 document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
                 document.querySelector("#newTodoOverlay").style.display = "none";
                 document.forms.newTodoOverlay.reset();
@@ -165,12 +170,66 @@ const DomManager = () => {
         document.querySelector("#todoFullCategoryImg").src = todo.category.symbol;
     };
 
+    const closeFullTodo = () => {
+        document.querySelector("#todoFullOverlay").style.display = "none";
+    };
+
+    const getTodoEdits = (manager, todoDOM) => {
+        const todo = manager.getTodoByID(todoDOM.dataset.todoID);
+        document.querySelector("#editTodoOverlay").style.display = "flex";
+        document.querySelector("#editTodoTitle").value = todo.name;
+        document.querySelector("#editTodoDescription").value = todo.desc;
+        let tmpDate = todo.dueDate;
+        tmpDate.setMinutes(todo.dueDate.getMinutes() - todo.dueDate.getTimezoneOffset());
+        document.querySelector("#editTodoDueDate").value = tmpDate.toISOString().slice(0,16);
+        manager.categories.forEach( (category) => {
+            const categoryOption = document.createElement("option");
+            categoryOption.value=category.categoryID;
+            categoryOption.text=category.name;
+            if (category == todo.category) {
+                categoryOption.selected = "selected";
+            }
+            document.querySelector("#editTodoCategory").appendChild(categoryOption);
+        });
+
+        const closeButton = document.querySelector("#editTodoCloseForm");
+        closeButton.addEventListener("click", () => {
+            document.querySelector("#editTodoOverlay").style.display = "none";
+            document.forms.editTodoOverlay.reset();
+            const toDelete = document.querySelectorAll("#editTodoOverlay option")
+            toDelete.forEach((e) => {
+                e.parentElement.removeChild(e);
+            });
+        });
+
+        const submitButton = document.querySelector("#editTodoConfirmForm");
+        submitButton.addEventListener("click", () => {
+            const newTodoName = document.forms.editTodoOverlay["editTodoTitle"].value;
+            const newTodoDescription = document.forms.editTodoOverlay["editTodoDescription"].value;
+            const newTodoDueDate = new Date(document.forms.editTodoOverlay["editTodoDueDate"].value);
+            const newTodoCategory = manager.getCategoryByID(document.forms.editTodoOverlay["editTodoCategory"].value);
+
+            if(validTodoInput(newTodoName, newTodoDueDate)) {
+                addTodoToDOM(manager.addTodo(newTodoName,newTodoDescription,newTodoDueDate,newTodoCategory));
+                document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
+                document.querySelector("#editTodoOverlay").style.display = "none";
+                document.forms.editTodoOverlay.reset();
+                const toDelete = document.querySelectorAll("#editTodoCategory option")
+                toDelete.forEach((e) => {
+                    e.parentElement.removeChild(e);
+                });
+            }
+        });
+    }
+
     return {
         addCategoryToDOM,
         addTodoToDOM,
         getNewCategory,
         getNewTodo,
-        showFullTodo
+        showFullTodo,
+        closeFullTodo,
+        getTodoEdits
     }
 };
 
@@ -195,9 +254,7 @@ function validCategoryInput() {
     return invalidForm;
 };
 
-function validTodoInput() {
-    // the second time the form is submitted the fields arent right
-    const newTodoName = document.forms.newTodoOverlay["newTodoTitle"].value;
+function validTodoInput(newTodoName, newTodoDueDate) {
     const validName = newTodoName.length > 2 && newTodoName.length < 12; 
     if (!validName) {
         console.log(newTodoName);
@@ -205,7 +262,6 @@ function validTodoInput() {
       return false;
     }
 
-    const newTodoDueDate = document.forms.newTodoOverlay["newTodoDueDate"].value;
     const validDate = newTodoDueDate != "" && newTodoDueDate != null && 
         new Date(newTodoDueDate) > new Date(); // Check against current date
     if (!validDate) {

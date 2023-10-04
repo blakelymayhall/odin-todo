@@ -18,13 +18,23 @@ addTodoButton.addEventListener("click", () => {
 });
 
 document.addEventListener("click", (e) => {
-    const target = e.target.closest(".todoNote");
+    let target; 
+
+    target = e.target.closest(".todoEditButton");
     if(target) {
-        console.log(target);
+        domManager.getTodoEdits(manager, target.parentNode.parentNode)
+        return;
+    };
+
+    target = e.target.closest(".todoNote");
+    if(target) {
         domManager.showFullTodo(manager, target);
+        return;
+    };
+
+    target = e.target.closest("#todoFullOverlayCloseButton");
+    if(target) {
+        domManager.closeFullTodo();
+        return;
     };
 });
-
-var intervalId = setInterval(function() {
-    console.log(manager.todos);
-  }, 5000);
