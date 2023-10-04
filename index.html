@@ -48,6 +48,22 @@
                     <button type="button" id="newTodoConfirmForm">Confirm</button>
                 </div>
             </form>
+            <form id="editTodoOverlay">
+                <label for="editTodoTitle">Edit Todo Name:</label>
+                <input type="text" id="editTodoTitle" name="editTodoTitle" autocomplete="off">
+                <label for="editTodoDescription">Edit Todo Description:</label>
+                <textarea id="editTodoDescription"></textarea>
+                <label for="editTodoDueDate">Edit Due Date:</label>
+                <input type="datetime-local" id="editTodoDueDate" name="editTodoDueDate">
+                <label for="editTodoCategory">Edit Category:</label>
+                <select id="editTodoCategory" name="editTodoCategory">
+                    <!--Load the category list here-->
+                </select>
+                <div id="editTodoButtonRow">
+                    <button type="button" id="editTodoCloseForm">Close</button>
+                    <button type="button" id="editTodoConfirmForm">Confirm</button>
+                </div>
+            </form>
             <div id="todoFullOverlay">
                 <div id="todoFullOverlayCloseButton">
                     X
