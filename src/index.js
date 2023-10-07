@@ -42,7 +42,7 @@ const DomManager = () => {
         document.querySelector("#categoryList").insertBefore(seperator,addCategoryButton);
     };
 
-    const addTodoToDOM = (manager, todo) => {
+    const addTodoToDOM = (todo) => {
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
         todoNote.style.background=todo.category.color;
@@ -73,7 +73,7 @@ const DomManager = () => {
         todoDateTitle.textContent = "Due Date:";
         const todoDateContent = document.createElement("p");
         todoDateContent.classList.add("todoDateContent");
-        todoDateContent.textContent = manager.GetFormattedDate(todo.dueDate);
+        todoDateContent.textContent = todo.GetFormattedDate();
         const todoCategory = document.createElement("img");
         todoCategory.classList.add("todoCategory");
         todoCategory.src = todo.category.symbol;
@@ -204,7 +204,7 @@ const DomManager = () => {
             manager.updateTodo(todoBeingEdited, newTodoName, newTodoDescription, newTodoDueDate, newTodoCategory);
             const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
             todoDOM.querySelector(".todoTitleContent").textContent = todoBeingEdited.name;
-            todoDOM.querySelector(".todoDateContent").textContent = manager.GetFormattedDate(todoBeingEdited.dueDate);
+            todoDOM.querySelector(".todoDateContent").textContent = todoBeingEdited.GetFormattedDate();
 
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
             document.querySelector("#editTodoOverlay").style.display = "none";

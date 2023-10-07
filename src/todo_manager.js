@@ -58,23 +58,6 @@ const Manager = () => {
         todoBeingEdited.category = newTodoCategory;
     }
 
-    const GetFormattedDate = (dueDate) => {
-        let formattedDate;
-
-        if (isToday(dueDate)) {
-            formattedDate = "Today @ ";
-        }
-        else if (isTomorrow(dueDate)) {
-            formattedDate = "Tomorrow @ ";
-        }
-        else {
-            formattedDate = format(dueDate, "eeee, MMM d @ ");
-        }
-        
-        formattedDate = formattedDate + format(dueDate, "h:mm a");
-        return formattedDate;
-    };
-
     return {
         categories,
         todos,
@@ -83,19 +66,37 @@ const Manager = () => {
         getCategoryByName,
         getCategoryByID,
         getTodoByID,
-        updateTodo,
-        GetFormattedDate
+        updateTodo
     }
 }
 
 const Todo = (name, desc, dueDate, category, status) => {
     const todoID = genID();
 
+    function GetFormattedDate() {
+        let formattedDate;
+
+        if (isToday(this.dueDate)) {
+            formattedDate = "Today @ ";
+        }
+        else if (isTomorrow(this.dueDate)) {
+            formattedDate = "Tomorrow @ ";
+        }
+        else {
+            formattedDate = format(this.dueDate, "eeee, MMM d @ ");
+        }
+        
+        formattedDate = formattedDate + format(this.dueDate, "h:mm a");
+        return formattedDate;
+    };
+
+
     return {
         todoID,
         name,
         desc,
         dueDate,
+        GetFormattedDate,
         category,
         status
     }

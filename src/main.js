@@ -6,7 +6,7 @@ import "./style/styles.css";
 const manager = Manager();
 const domManager = DomManager();
 domManager.addCategoryToDOM(manager.addCategory("Default"));
-domManager.addTodoToDOM(manager, manager.addTodo("Click Me!","",new Date(),manager.getCategoryByName("Default")));
+domManager.addTodoToDOM(manager.addTodo("Click Me!","",new Date(),manager.getCategoryByName("Default")));
 
 // Click events
 const addCategoryButton = document.querySelector("#addCategoryButton");
