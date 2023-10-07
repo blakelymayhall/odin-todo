@@ -50,21 +50,15 @@ const Manager = () => {
         return newTodo;
     }
 
-    return {
-        categories,
-        todos,
-        addCategory,
-        addTodo,
-        getCategoryByName,
-        getCategoryByID,
-        getTodoByID
+    const updateTodo = (todoBeingEdited, newTodoName, newTodoDescription, newTodoDueDate, newTodoCategory) => {
+        // does this update in the array?
+        todoBeingEdited.name = newTodoName;
+        todoBeingEdited.dueDate = newTodoDueDate
+        todoBeingEdited.desc = newTodoDescription;
+        todoBeingEdited.category = newTodoCategory;
     }
-}
 
-const Todo = (name, desc, dueDate, category, status) => {
-    const todoID = genID();
-
-    const GetFormattedDate = () => {
+    const GetFormattedDate = (dueDate) => {
         let formattedDate;
 
         if (isToday(dueDate)) {
@@ -77,16 +71,31 @@ const Todo = (name, desc, dueDate, category, status) => {
             formattedDate = format(dueDate, "eeee, MMM d @ ");
         }
         
-        formattedDate = formattedDate + format(dueDate, "h:m a");
+        formattedDate = formattedDate + format(dueDate, "h:mm a");
         return formattedDate;
     };
+
+    return {
+        categories,
+        todos,
+        addCategory,
+        addTodo,
+        getCategoryByName,
+        getCategoryByID,
+        getTodoByID,
+        updateTodo,
+        GetFormattedDate
+    }
+}
+
+const Todo = (name, desc, dueDate, category, status) => {
+    const todoID = genID();
 
     return {
         todoID,
         name,
         desc,
         dueDate,
-        GetFormattedDate,
         category,
         status
     }
