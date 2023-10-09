@@ -93,7 +93,7 @@ const DomManager = () => {
         document.querySelector("#board").appendChild(todoNote);
     };
 
-    const getNewCategory = (manager) =>  {
+    const getNewCategory = () =>  {
         const addCategoryButton = document.querySelector("#addCategoryButton");
         addCategoryButton.style.display = "none";
         const newCategoryNameForm = document.createElement("form");
@@ -109,10 +109,13 @@ const DomManager = () => {
             formSubmit.preventDefault();
             if(validCategoryInput()) {
                 const name = document.forms.newCategoryNameForm["newCategoryName"].value;
-                addCategoryToDOM(manager.addCategory(name));
                 newCategoryNameForm.parentElement.removeChild(newCategoryNameForm);
                 addCategoryButton.style.display = "block";
+
+                return name;
             }
+
+            return null;
         });
         document.querySelector("#categoryList").insertBefore(newCategoryNameForm,addCategoryButton);
     }
@@ -140,7 +143,6 @@ const DomManager = () => {
         const newTodoCategory = manager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
 
         if(validTodoInput(newTodoName, newTodoDueDate)) {
-            addTodoToDOM(manager.addTodo(newTodoName,newTodoDescription,newTodoDueDate,newTodoCategory));
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
             document.querySelector("#newTodoOverlay").style.display = "none";
             document.forms.newTodoOverlay.reset();
@@ -148,7 +150,16 @@ const DomManager = () => {
             toDelete.forEach((e) => {
                 e.parentElement.removeChild(e);
             });
+            
+            return {
+                newTodoName, 
+                newTodoDescription, 
+                newTodoDueDate, 
+                newTodoCategory
+            };
         }
+
+        return null;
     }
 
     const closeNewTodoForm = () => {
@@ -161,8 +172,7 @@ const DomManager = () => {
         });
     };
 
-    const showFullTodo = (manager, todoDOM) => {
-        const todo = manager.getTodoByID(todoDOM.dataset.todoID);
+    const showFullTodo = (todo) => {
         document.querySelector("#todoFullOverlay").style.display = "flex";
         document.querySelector("#todoFullOverlay").style.background = todo.category.color;
         document.querySelector("#todoFullName").textContent = todo.name;
@@ -176,8 +186,10 @@ const DomManager = () => {
         document.querySelector("#todoFullOverlay").style.display = "none";
     };
 
-    const openEditTodoForm = (manager, todoDOM) => {
-        todoBeingEdited = manager.getTodoByID(todoDOM.dataset.todoID);
+    function openEditTodoForm(manager, todo) {
+        this.todoBeingEdited = todo;
+        todoBeingEdited = this.todoBeingEdited;
+
         document.querySelector("#editTodoOverlay").style.display = "flex";
         document.querySelector("#editTodoTitle").value = todoBeingEdited.name;
         document.querySelector("#editTodoDescription").value = todoBeingEdited.desc;
@@ -201,11 +213,9 @@ const DomManager = () => {
         const newTodoCategory = manager.getCategoryByID(document.forms.editTodoOverlay["editTodoCategory"].value);
 
         if(validTodoInput(newTodoName, newTodoDueDate, true)) {
-            manager.updateTodo(todoBeingEdited, newTodoName, newTodoDescription, newTodoDueDate, newTodoCategory);
             const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
             todoDOM.querySelector(".todoTitleContent").textContent = todoBeingEdited.name;
             todoDOM.querySelector(".todoDateContent").textContent = todoBeingEdited.GetFormattedDate();
-
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
             document.querySelector("#editTodoOverlay").style.display = "none";
             document.forms.editTodoOverlay.reset();
@@ -213,7 +223,16 @@ const DomManager = () => {
             toDelete.forEach((e) => {
                 e.parentElement.removeChild(e);
             });
+            
+            return {
+                newTodoName, 
+                newTodoDescription, 
+                newTodoDueDate, 
+                newTodoCategory
+            };
         }
+
+        return null;
     };
 
     const closeEditTodoForm = () => {
@@ -224,6 +243,13 @@ const DomManager = () => {
             e.parentElement.removeChild(e);
         });
     };
+
+    const deleteTodoEditTodoForm = () => {
+        document.querySelector("#editTodoOverlay").style.display = "none";
+        document.forms.editTodoOverlay.reset();
+        const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
+        todoDOM.parentNode.removeChild(todoDOM);
+    }
 
     return {
         addCategoryToDOM,
@@ -236,7 +262,8 @@ const DomManager = () => {
         closeFullTodo,
         openEditTodoForm,
         submitEditTodoForm,
-        closeEditTodoForm
+        closeEditTodoForm,
+        deleteTodoEditTodoForm
     }
 };
 

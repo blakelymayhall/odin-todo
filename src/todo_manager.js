@@ -30,33 +30,44 @@ const Manager = () => {
         return categories.find( (category) => {
             return category.name == name;
         });
-    }
+    };
 
     const getCategoryByID = (id) => {
         return categories.find( (category) => {
             return category.categoryID == id;
         });
-    }
+    };
 
     const getTodoByID = (id) => {
         return todos.find( (todo) => {
             return todo.todoID == id;
         });
-    }
+    };
 
-    const addTodo = (name, desc, dueDate, category) => {
-        let newTodo = Todo(name, desc, dueDate, category, false);
+    const addTodo = (newTodoFields) => {
+        let newTodo = Todo(newTodoFields.newTodoName, 
+            newTodoFields.newTodoDescription, 
+            newTodoFields.newTodoDueDate, 
+            newTodoFields.newTodoCategory, 
+            false);
         todos.push(newTodo);
         return newTodo;
-    }
+    };
 
-    const updateTodo = (todoBeingEdited, newTodoName, newTodoDescription, newTodoDueDate, newTodoCategory) => {
+    const updateTodo = (todoBeingEdited, editedTodoFields) => {
         // does this update in the array?
-        todoBeingEdited.name = newTodoName;
-        todoBeingEdited.dueDate = newTodoDueDate
-        todoBeingEdited.desc = newTodoDescription;
-        todoBeingEdited.category = newTodoCategory;
-    }
+        todoBeingEdited.name = editedTodoFields.newTodoName;
+        todoBeingEdited.dueDate = editedTodoFields.newTodoDueDate
+        todoBeingEdited.desc = editedTodoFields.newTodoDescription;
+        todoBeingEdited.category = editedTodoFields.newTodoCategory;
+    };
+
+    const deleteTodo = (todoToDelete) => {
+        const todoIdx = todos.indexOf( (todo) => {
+            return todo.todoID == todoToDelete;
+        });
+        todos.splice(todoIdx,1);
+    };
 
     return {
         categories,
@@ -66,7 +77,8 @@ const Manager = () => {
         getCategoryByName,
         getCategoryByID,
         getTodoByID,
-        updateTodo
+        updateTodo,
+        deleteTodo
     }
 }
 

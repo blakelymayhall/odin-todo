@@ -77,6 +77,10 @@ Repo for the todo list project in the javascript course of the Odin Project
     - its because you are adding additional event listners. move to main.js
 - Move the form event listeners to the main.js script with the document.eventlistener strategy
 
+10/8/23
+- Add delete todo button to the todo edit form
+- refactor code so that main executes the manage functions rather than the dom manager doing it
+
 Todo:
 - Make categories editable
 - Make data persist
@@ -88,6 +92,7 @@ Todo:
     - Clear data
 
 Quality:
+- fix the category addition
 - Enforce unable to make new category if exceed numbr of images/colors
 - Fix name v. title in todo and category uses
 - Enforce name uniqueness in category creation (?)

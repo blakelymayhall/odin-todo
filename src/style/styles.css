@@ -203,7 +203,8 @@ ul {
 }
 
 #newTodoCloseForm, #newTodoConfirmForm, #newTodoCategory, 
-#editTodoCloseForm, #editTodoConfirmForm, #editTodoCategory {
+#editTodoCloseForm, #editTodoConfirmForm, #editTodoCategory,
+#editTodoDeleteTodo {
     width: 100px;
 }
 
@@ -283,6 +284,10 @@ ul {
 
 #editTodoOverlay {
     display: none;
+}
+
+#editTodoDeleteTodo {
+    color: red;
 }
 
 .todoNote {
