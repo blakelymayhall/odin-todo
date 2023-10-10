@@ -105,18 +105,6 @@ const DomManager = () => {
         newCategoryName.minlength="2";
         newCategoryName.maxlength="20";
         newCategoryNameForm.appendChild(newCategoryName);
-        newCategoryNameForm.addEventListener("submit", (formSubmit) => {
-            formSubmit.preventDefault();
-            if(validCategoryInput()) {
-                const name = document.forms.newCategoryNameForm["newCategoryName"].value;
-                newCategoryNameForm.parentElement.removeChild(newCategoryNameForm);
-                addCategoryButton.style.display = "block";
-
-                return name;
-            }
-
-            return null;
-        });
         document.querySelector("#categoryList").insertBefore(newCategoryNameForm,addCategoryButton);
     }
 
@@ -277,15 +265,6 @@ function loadImageAssets() {
     document.querySelector("#searchIcon").src = SearchIcon;
     document.querySelector("#helpButton").src = HelpButton;
     document.querySelector("#settingsButton").src = SettingsButton;
-};
-
-function validCategoryInput() {
-    const newCategoryName = document.forms.newCategoryNameForm["newCategoryName"].value;
-    const invalidForm = newCategoryName.length > 2 && newCategoryName.length < 12; 
-    if (!invalidForm) {
-      alert("Names must be between 2 and 12 characters");
-    }
-    return invalidForm;
 };
 
 function validTodoInput(newTodoName, newTodoDueDate, isEdit = false) {

@@ -160,7 +160,7 @@ ul {
     gap: 5%;
 }
 
-#newTodoOverlay, #editTodoOverlay {
+#newTodoOverlay, #editTodoOverlay, #editCategoryOverlay {
     position: absolute;
     background:rgb(228, 209, 147);
     z-index: 1;
@@ -179,7 +179,12 @@ ul {
     box-shadow: 2px -2px black;
 }
 
-#newTodoOverlay label, #newTodoButtonRow, #editTodoOverlay label, #editTodoButtonRow{
+#editCategoryTitle {
+    width: 200px;
+}
+
+#newTodoOverlay label, #newTodoButtonRow, #editTodoOverlay label, #editTodoButtonRow,
+#editCategoryOverlay label, #editCategoryButtonRow {
     padding-top: 10px;
 }
 
@@ -197,14 +202,15 @@ ul {
     width: fit-content;
 }
 
-#newTodoButtonRow, #editTodoButtonRow {
+#newTodoButtonRow, #editTodoButtonRow, #editCategoryButtonRow {
     display: flex;
     justify-content: space-between;
 }
 
 #newTodoCloseForm, #newTodoConfirmForm, #newTodoCategory, 
 #editTodoCloseForm, #editTodoConfirmForm, #editTodoCategory,
-#editTodoDeleteTodo {
+#editTodoDeleteTodo, #editCategoryCloseForm, #editCategoryDelete,
+#editCategoryConfirmForm {
     width: 100px;
 }
 
@@ -286,7 +292,7 @@ ul {
     display: none;
 }
 
-#editTodoDeleteTodo {
+#editTodoDeleteTodo, #editCategoryDelete {
     color: red;
 }
 
