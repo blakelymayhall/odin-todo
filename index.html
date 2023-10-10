@@ -31,6 +31,16 @@
             </div>
         </div>
         <div id="board">
+            <form id="editCategoryOverlay">
+                <label for="editCategoryTitle">Edit Category Name:</label>
+                <input type="text" id="editCategoryTitle" name="editCategoryTitle" autocomplete="off">
+                <!-- Chose Color, Choose Symbol -->
+                <div id="editCategoryButtonRow">
+                    <button type="button" id="editCategoryCloseForm">Close</button>
+                    <button type="button" id="editCategoryDelete">Delete</button>
+                    <button type="button" id="editCategoryConfirmForm">Confirm</button>
+                </div>
+            </form>
             <form id="newTodoOverlay">
                 <p id="newTodoHeader">Add New Todo:</p>
                 <label for="newTodoTitle">Enter Todo Name:</label>
