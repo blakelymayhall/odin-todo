@@ -84,8 +84,11 @@ Repo for the todo list project in the javascript course of the Odin Project
 10/9/23
 - Fixed the categories functionality
 
+10/11/23
+- Start to implement edit category
+
 Todo:
-- Make categories editable
+- Finish adding the edit category color and icon
 - Make data persist
 - Help button
 - Sort functionality

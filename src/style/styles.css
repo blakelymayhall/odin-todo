@@ -184,7 +184,7 @@ ul {
 }
 
 #newTodoOverlay label, #newTodoButtonRow, #editTodoOverlay label, #editTodoButtonRow,
-#editCategoryOverlay label, #editCategoryButtonRow {
+#editCategoryOverlay label, #editCategoryButtonRow, #editCategoryOverlay p {
     padding-top: 10px;
 }
 
@@ -368,3 +368,17 @@ ul {
     margin-top: 5px;
 }
 
+#colorPicker, #iconPicker {
+    display: flex;
+    justify-content:left;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    border: solid violet;
+}
+
+.colorSquare {
+    width: 20px;
+    height: 20px;
+    background: red;
+}

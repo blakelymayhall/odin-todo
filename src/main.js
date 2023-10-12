@@ -1,13 +1,12 @@
 import { DomManager } from "./index";
 import { Manager } from './todo_manager';
 import "./style/styles.css";
-import { ca } from "date-fns/locale";
 
 // Initial setup
 const manager = Manager();
 const domManager = DomManager();
 domManager.addCategoryToDOM(manager.addCategory("Default"));
-domManager.addTodoToDOM(manager.addTodo( {
+domManager.addTodoToDOM(manager, manager.addTodo( {
     newTodoName: "Click Me!",
     newTodoDescription: "",
     newTodoDueDate: new Date(),
@@ -65,7 +64,7 @@ document.addEventListener("click", (e) => {
     let showFullTodo = e.target.closest(".todoNote");
     if(showFullTodo) {
         const todo = manager.getTodoByID(showFullTodo.dataset.todoID);
-        domManager.showFullTodo(todo);
+        domManager.showFullTodo(manager, todo);
         return;
     };
 
@@ -100,24 +99,31 @@ document.addEventListener("click", (e) => {
     let openEditCategoryForm = e.target.closest(".editCategoryButton"); 
     if (openEditCategoryForm) {
         const categoryID = openEditCategoryForm.parentNode.parentNode.dataset.categoryID;
-        let categoryBeingEdited = manager.getCategoryByID(categoryID);
-        document.querySelector("#editCategoryOverlay").style.display = "flex";
-        document.querySelector("#editCategoryTitle").value = categoryBeingEdited.name;
-        // color
-        // image
+        const category = manager.getCategoryByID(categoryID);
+        domManager.openCategoryEditForm(manager, category);
         return;   
     }
 
-    let closeEditCategoryForm = e.target.closest("#editCategoryCloseForm"); 
-    if (closeEditCategoryForm) {
+    let closeCategoryEditForm = e.target.closest("#editCategoryCloseForm"); 
+    if (closeCategoryEditForm) {
         document.querySelector("#editCategoryOverlay").style.display = "none";
         document.forms.editCategoryOverlay.reset();
         return;   
     }
 
-    // Delete category
+    let deleteCategoryEditForm = e.target.closest("#editCategoryDelete"); 
+    if (deleteCategoryEditForm) {
+        domManager.deleteCategoryEditForm();
+        manager.deleteCategory(category);
+        return;   
+    }
 
-    // Submit category edit
+    let submitCategoryEditForm = e.target.closest("#editCategoryConfirmForm"); 
+    if (submitCategoryEditForm) {
+        const editedCategoryFields = domManager.submitCategoryEditForm();
+        manager.updateCategory(domManager.categoryBeingEdited, editedCategoryFields);
+        return;   
+    }
 
     // Move these to dom manager
     /////////////////////////////////////////////////////////
@@ -148,6 +154,7 @@ document.addEventListener("submit", (e) => {
 ///////////////////////////////////////////////////////////////////////////////
 function doSomething() {
     console.log(domManager.todoBeingEdited)
+    console.log(domManager.categoryBeingEdited)
     console.log(manager.categories)
     console.log(manager.todos)
 }

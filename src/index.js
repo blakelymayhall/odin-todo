@@ -14,6 +14,7 @@ import CheckMark from "../src/imgs/icons8-check-mark-50.png";
 const DomManager = () => {
     
     let todoBeingEdited = null;
+    let categoryBeingEdited = null;
 
     loadImageAssets();
 
@@ -42,7 +43,7 @@ const DomManager = () => {
         document.querySelector("#categoryList").insertBefore(seperator,addCategoryButton);
     };
 
-    const addTodoToDOM = (todo) => {
+    const addTodoToDOM = (manager, todo) => {
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
         todoNote.style.background=todo.category.color;
@@ -73,7 +74,7 @@ const DomManager = () => {
         todoDateTitle.textContent = "Due Date:";
         const todoDateContent = document.createElement("p");
         todoDateContent.classList.add("todoDateContent");
-        todoDateContent.textContent = todo.GetFormattedDate();
+        todoDateContent.textContent = manager.GetFormattedDate(todo.dueDate);
         const todoCategory = document.createElement("img");
         todoCategory.classList.add("todoCategory");
         todoCategory.src = todo.category.symbol;
@@ -160,11 +161,11 @@ const DomManager = () => {
         });
     };
 
-    const showFullTodo = (todo) => {
+    const showFullTodo = (manager, todo) => {
         document.querySelector("#todoFullOverlay").style.display = "flex";
         document.querySelector("#todoFullOverlay").style.background = todo.category.color;
         document.querySelector("#todoFullName").textContent = todo.name;
-        document.querySelector("#todoFullDate").textContent = todo.GetFormattedDate();
+        document.querySelector("#todoFullDate").textContent = manager.GetFormattedDate(todo.dueDate);
         document.querySelector("#todoFullDescription").textContent = todo.desc;
         document.querySelector("#todoFullCategory").textContent = todo.category.name;
         document.querySelector("#todoFullCategoryImg").src = todo.category.symbol;
@@ -202,8 +203,8 @@ const DomManager = () => {
 
         if(validTodoInput(newTodoName, newTodoDueDate, true)) {
             const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
-            todoDOM.querySelector(".todoTitleContent").textContent = todoBeingEdited.name;
-            todoDOM.querySelector(".todoDateContent").textContent = todoBeingEdited.GetFormattedDate();
+            todoDOM.querySelector(".todoTitleContent").textContent = newTodoName;
+            todoDOM.querySelector(".todoDateContent").textContent = manager.GetFormattedDate(newTodoDueDate);
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
             document.querySelector("#editTodoOverlay").style.display = "none";
             document.forms.editTodoOverlay.reset();
@@ -237,7 +238,43 @@ const DomManager = () => {
         document.forms.editTodoOverlay.reset();
         const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
         todoDOM.parentNode.removeChild(todoDOM);
-    }
+    };
+
+    function openCategoryEditForm(manager, category) {
+        this.categoryBeingEdited = category;
+        categoryBeingEdited = this.categoryBeingEdited;
+
+        document.querySelector("#editCategoryOverlay").style.display = "flex";
+        document.querySelector("#editCategoryTitle").value = categoryBeingEdited.name;
+
+        // color
+        // image
+    };
+
+    const submitCategoryEditForm = () => {
+        const newCategoryName = document.forms.editCategoryOverlay["editCategoryTitle"].value;
+        const validName = newCategoryName.length > 2 && newCategoryName.length < 12; 
+        if (validName) {
+            document.querySelector("#editCategoryOverlay").style.display = "none";
+            document.forms.editCategoryOverlay.reset();
+            const category = document.querySelector(`[data-category-i-d='${categoryBeingEdited.categoryID}']`);
+            category.firstChild.textContent = newCategoryName;
+            return {
+                newCategoryName
+            }
+        }
+        else {
+            alert("Names must be between 2 and 12 characters");
+            return null;
+        }
+    };
+
+    const deleteCategoryEditForm = () => {
+        document.querySelector("#editCategoryOverlay").style.display = "none";
+        document.forms.editCategoryOverlay.reset();
+        const category = document.querySelector(`[data-category-i-d='${categoryBeingEdited.categoryID}']`);
+        category.parentNode.removeChild(category);
+    };
 
     return {
         addCategoryToDOM,
@@ -251,10 +288,12 @@ const DomManager = () => {
         openEditTodoForm,
         submitEditTodoForm,
         closeEditTodoForm,
-        deleteTodoEditTodoForm
+        deleteTodoEditTodoForm,
+        openCategoryEditForm,
+        submitCategoryEditForm,
+        deleteCategoryEditForm
     }
 };
-
 
 // Support Functions
 function loadImageAssets() {

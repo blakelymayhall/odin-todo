@@ -69,6 +69,35 @@ const Manager = () => {
         todos.splice(todoIdx,1);
     };
 
+    const updateCategory = (categoryBeingEdited, editedCategoryFields) => {
+        categoryBeingEdited.name = editedCategoryFields.newCategoryName;
+    }
+
+    const deleteCategory = (categoryToDelete) => {
+        const categoryIdx = categories.indexOf( (category) => {
+            return category.categoryID == categoryToDelete;
+        });
+        categories.splice(categoryIdx,1);
+    }
+
+    const GetFormattedDate = (date) => {
+        let formattedDate;
+
+        if (isToday(date)) {
+            formattedDate = "Today @ ";
+        }
+        else if (isTomorrow(date)) {
+            formattedDate = "Tomorrow @ ";
+        }
+        else {
+            formattedDate = format(date, "eeee, MMM d @ ");
+        }
+        
+        formattedDate = formattedDate + format(date, "h:mm a");
+        return formattedDate;
+    };
+
+
     return {
         categories,
         todos,
@@ -78,37 +107,21 @@ const Manager = () => {
         getCategoryByID,
         getTodoByID,
         updateTodo,
-        deleteTodo
+        deleteTodo,
+        updateCategory,
+        deleteCategory,
+        GetFormattedDate
     }
 }
 
 const Todo = (name, desc, dueDate, category, status) => {
     const todoID = genID();
 
-    function GetFormattedDate() {
-        let formattedDate;
-
-        if (isToday(this.dueDate)) {
-            formattedDate = "Today @ ";
-        }
-        else if (isTomorrow(this.dueDate)) {
-            formattedDate = "Tomorrow @ ";
-        }
-        else {
-            formattedDate = format(this.dueDate, "eeee, MMM d @ ");
-        }
-        
-        formattedDate = formattedDate + format(this.dueDate, "h:mm a");
-        return formattedDate;
-    };
-
-
     return {
         todoID,
         name,
         desc,
         dueDate,
-        GetFormattedDate,
         category,
         status
     }
