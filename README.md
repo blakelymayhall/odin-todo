@@ -88,6 +88,7 @@ Repo for the todo list project in the javascript course of the Odin Project
 - Start to implement edit category
 
 Todo:
+- Understand better why I had to use "this" for the todoBeingEdited but not the todos or categories 
 - Finish adding the edit category color and icon
 - Make data persist
 - Help button

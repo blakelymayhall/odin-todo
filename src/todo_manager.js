@@ -55,7 +55,6 @@ const Manager = () => {
     };
 
     const updateTodo = (todoBeingEdited, editedTodoFields) => {
-        // does this update in the array?
         todoBeingEdited.name = editedTodoFields.newTodoName;
         todoBeingEdited.dueDate = editedTodoFields.newTodoDueDate
         todoBeingEdited.desc = editedTodoFields.newTodoDescription;
