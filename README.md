@@ -87,6 +87,9 @@ Repo for the todo list project in the javascript course of the Odin Project
 10/11/23
 - Start to implement edit category
 
+10/14/23
+- Major refactoring of code for clarity and readability
+
 Todo:
 - Understand better why I had to use "this" for the todoBeingEdited but not the todos or categories 
 - Finish adding the edit category color and icon

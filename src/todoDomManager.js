@@ -1,47 +1,10 @@
-import EditCategoryButton from "../src/imgs/icons8-settings-30.png";
-import AddCategoryButton from "../src/imgs/icons8-plus-30.png";
-import AddToDoButton from "../src/imgs/icons8-plus-50.png";
-import FilterButton from "../src/imgs/icons8-filter-50.png";
-import SortButton from "../src/imgs/icons8-sort-32.png";
-import SearchIcon from "../src/imgs/icons8-magnifying-glass-50.png";
-import HelpButton from "../src/imgs/icons8-help-50.png";
-import SettingsButton from "../src/imgs/icons8-settings-96.png";
 import Pushpin from "../src/imgs/icons8-push-pin-50.png";
-import TodoEditButton from "../src/imgs/icons8-edit-50.png";
 import CheckMark from "../src/imgs/icons8-check-mark-50.png";
+import TodoEditButton from "../src/imgs/icons8-edit-50.png";
 
-// Export Functions
-const DomManager = () => {
-    
+const TodoDomManager = () => {
+
     let todoBeingEdited = null;
-    let categoryBeingEdited = null;
-
-    loadImageAssets();
-
-    const addCategoryToDOM = (category) => {
-        const categoryRow = document.createElement("li");
-        categoryRow.classList.add("categoryRow");
-        categoryRow.dataset.categoryID = category.categoryID;
-        const categoryName = document.createElement("p");
-        categoryName.textContent = category.name;
-        const categroyRowImages = document.createElement("div");
-        categroyRowImages.classList.add("categroyRowImages");
-        const categoryRowCategoryIcon = document.createElement("img");
-        categoryRowCategoryIcon.src = category.symbol;
-        categoryRowCategoryIcon.classList.add("categoryRowCategoryIcon");
-        const editCategoryButton = document.createElement("img");
-        editCategoryButton.src = EditCategoryButton;
-        editCategoryButton.classList.add("editCategoryButton");
-        categroyRowImages.appendChild(categoryRowCategoryIcon);
-        categroyRowImages.appendChild(editCategoryButton);
-        categoryRow.appendChild(categoryName);
-        categoryRow.appendChild(categroyRowImages);
-        const seperator = document.createElement("li");
-        seperator.classList.add("seperator");
-        const addCategoryButton = document.querySelector("#addCategoryButton");
-        document.querySelector("#categoryList").insertBefore(categoryRow,addCategoryButton);
-        document.querySelector("#categoryList").insertBefore(seperator,addCategoryButton);
-    };
 
     const addTodoToDOM = (manager, todo) => {
         const todoNote = document.createElement("div");
@@ -94,20 +57,19 @@ const DomManager = () => {
         document.querySelector("#board").appendChild(todoNote);
     };
 
-    const getNewCategory = () =>  {
-        const addCategoryButton = document.querySelector("#addCategoryButton");
-        addCategoryButton.style.display = "none";
-        const newCategoryNameForm = document.createElement("form");
-        newCategoryNameForm.setAttribute("id", "newCategoryNameForm");
-        const newCategoryName = document.createElement("input");
-        newCategoryName.setAttribute("id", "newCategoryName");
-        newCategoryName.autofocus=true;
-        newCategoryName.type="text";
-        newCategoryName.minlength="2";
-        newCategoryName.maxlength="20";
-        newCategoryNameForm.appendChild(newCategoryName);
-        document.querySelector("#categoryList").insertBefore(newCategoryNameForm,addCategoryButton);
-    }
+    const showFullTodo = (manager, todo) => {
+        document.querySelector("#todoFullOverlay").style.display = "flex";
+        document.querySelector("#todoFullOverlay").style.background = todo.category.color;
+        document.querySelector("#todoFullName").textContent = todo.name;
+        document.querySelector("#todoFullDate").textContent = manager.GetFormattedDate(todo.dueDate);
+        document.querySelector("#todoFullDescription").textContent = todo.desc;
+        document.querySelector("#todoFullCategory").textContent = todo.category.name;
+        document.querySelector("#todoFullCategoryImg").src = todo.category.symbol;
+    };
+
+    const closeFullTodo = () => {
+        document.querySelector("#todoFullOverlay").style.display = "none";
+    };
 
     const openNewTodoForm = (manager) => {
         document.querySelector("#newTodoOverlay").style.display = "flex";
@@ -159,20 +121,6 @@ const DomManager = () => {
         toDelete.forEach((e) => {
             e.parentElement.removeChild(e);
         });
-    };
-
-    const showFullTodo = (manager, todo) => {
-        document.querySelector("#todoFullOverlay").style.display = "flex";
-        document.querySelector("#todoFullOverlay").style.background = todo.category.color;
-        document.querySelector("#todoFullName").textContent = todo.name;
-        document.querySelector("#todoFullDate").textContent = manager.GetFormattedDate(todo.dueDate);
-        document.querySelector("#todoFullDescription").textContent = todo.desc;
-        document.querySelector("#todoFullCategory").textContent = todo.category.name;
-        document.querySelector("#todoFullCategoryImg").src = todo.category.symbol;
-    };
-
-    const closeFullTodo = () => {
-        document.querySelector("#todoFullOverlay").style.display = "none";
     };
 
     function openEditTodoForm(manager, todo) {
@@ -233,96 +181,42 @@ const DomManager = () => {
         });
     };
 
-    const deleteTodoEditTodoForm = () => {
+    const deleteTodoViaEditForm = () => {
         document.querySelector("#editTodoOverlay").style.display = "none";
         document.forms.editTodoOverlay.reset();
         const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
         todoDOM.parentNode.removeChild(todoDOM);
     };
 
-    function openCategoryEditForm(manager, category) {
-        this.categoryBeingEdited = category;
-        categoryBeingEdited = this.categoryBeingEdited;
-
-        document.querySelector("#editCategoryOverlay").style.display = "flex";
-        document.querySelector("#editCategoryTitle").value = categoryBeingEdited.name;
-
-        // color
-        // image
-    };
-
-    const submitCategoryEditForm = () => {
-        const newCategoryName = document.forms.editCategoryOverlay["editCategoryTitle"].value;
-        const validName = newCategoryName.length > 2 && newCategoryName.length < 12; 
-        if (validName) {
-            document.querySelector("#editCategoryOverlay").style.display = "none";
-            document.forms.editCategoryOverlay.reset();
-            const category = document.querySelector(`[data-category-i-d='${categoryBeingEdited.categoryID}']`);
-            category.firstChild.textContent = newCategoryName;
-            return {
-                newCategoryName
-            }
+    function validTodoInput(newTodoName, newTodoDueDate, isEdit = false) {
+        const validName = newTodoName.length > 2 && newTodoName.length < 12; 
+        if (!validName) {
+          alert("Names must be between 2 and 12 characters");
+          return false;
         }
-        else {
-            alert("Names must be between 2 and 12 characters");
-            return null;
+    
+        const validDate = newTodoDueDate != "" && newTodoDueDate != null && 
+            (new Date(newTodoDueDate) > new Date() || isEdit); // Check against current date
+        if (!validDate) {
+          alert("Date must be future date");
+          return false;
         }
-    };
-
-    const deleteCategoryEditForm = () => {
-        document.querySelector("#editCategoryOverlay").style.display = "none";
-        document.forms.editCategoryOverlay.reset();
-        const category = document.querySelector(`[data-category-i-d='${categoryBeingEdited.categoryID}']`);
-        category.parentNode.removeChild(category);
+    
+        return true;
     };
 
     return {
-        addCategoryToDOM,
         addTodoToDOM,
-        getNewCategory,
+        showFullTodo,
+        closeFullTodo,
         openNewTodoForm,
         submitNewTodoForm,
         closeNewTodoForm,
-        showFullTodo,
-        closeFullTodo,
         openEditTodoForm,
         submitEditTodoForm,
         closeEditTodoForm,
-        deleteTodoEditTodoForm,
-        openCategoryEditForm,
-        submitCategoryEditForm,
-        deleteCategoryEditForm
+        deleteTodoViaEditForm
     }
 };
 
-// Support Functions
-function loadImageAssets() {
-    document.querySelector("#addCategoryButton").src = AddCategoryButton;
-    document.querySelector("#addToDoButton").src = AddToDoButton;
-    document.querySelector("#filterButton").src = FilterButton;
-    document.querySelector("#sortButton").src = SortButton;
-    document.querySelector("#searchIcon").src = SearchIcon;
-    document.querySelector("#helpButton").src = HelpButton;
-    document.querySelector("#settingsButton").src = SettingsButton;
-};
-
-function validTodoInput(newTodoName, newTodoDueDate, isEdit = false) {
-    const validName = newTodoName.length > 2 && newTodoName.length < 12; 
-    if (!validName) {
-      alert("Names must be between 2 and 12 characters");
-      return false;
-    }
-
-    const validDate = newTodoDueDate != "" && newTodoDueDate != null && 
-        (new Date(newTodoDueDate) > new Date() || isEdit); // Check against current date
-    if (!validDate) {
-      alert("Date must be future date");
-      return false;
-    }
-
-    return true;
-};
-
-export { 
-    DomManager
-};
+export { TodoDomManager };

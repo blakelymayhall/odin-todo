@@ -1,27 +1,27 @@
-import { DomManager } from "./index";
-import { Manager } from './todo_manager';
+import { DomManager } from "./domManager";
+import { Manager } from './manager';
 import "./style/styles.css";
 
 // Initial setup
 const manager = Manager();
 const domManager = DomManager();
-domManager.addCategoryToDOM(manager.addCategory("Default"));
-domManager.addTodoToDOM(manager, manager.addTodo( {
+domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Default"));
+domManager.todoDomManager.addTodoToDOM(manager, manager.todoManager.addTodo( {
     newTodoName: "Click Me!",
     newTodoDescription: "",
     newTodoDueDate: new Date(),
-    newTodoCategory: manager.getCategoryByName("Default")}));
+    newTodoCategory: manager.categoryManager.getCategoryByName("Default")}));
 
 // Click events
 /////////////////////////////////////////////////////////////////////////////
 const addCategoryButton = document.querySelector("#addCategoryButton");
 addCategoryButton.addEventListener("click", () => {
-    domManager.getNewCategory();
+    domManager.categoryDomManager.getNewCategory();
 });
 
 const addTodoButton = document.querySelector("#addToDoButton");
 addTodoButton.addEventListener("click", () => {
-    domManager.openNewTodoForm(manager);
+    domManager.todoDomManager.openNewTodoForm(manager);
 });
 
 // Dynamic Click Events (for elements that are not always visible)
@@ -33,28 +33,28 @@ document.addEventListener("click", (e) => {
     /////////////////////////////////////////////////////////
     let openEditTodoForm = e.target.closest(".todoEditButton");
     if(openEditTodoForm) {
-        const todo = manager.getTodoByID(openEditTodoForm.parentNode.parentNode.dataset.todoID);
-        domManager.openEditTodoForm(manager, todo);
+        const todo = manager.todoManager.getTodoByID(openEditTodoForm.parentNode.parentNode.dataset.todoID);
+        domManager.todoDomManager.openEditTodoForm(manager, todo);
         return;
     };
 
     let submitEditTodoForm = e.target.closest("#editTodoConfirmForm"); 
     if (submitEditTodoForm) {
         const editedTodoFields = domManager.submitEditTodoForm(manager);
-        manager.updateTodo(domManager.todoBeingEdited, editedTodoFields);
+        manager.todoDomManager.updateTodo(domManager.todoBeingEdited, editedTodoFields);
         return;   
     }
 
     let closeEditTodoForm = e.target.closest("#editTodoCloseForm"); 
     if (closeEditTodoForm) {
-        domManager.closeEditTodoForm();
+        domManager.todoDomManager.closeEditTodoForm();
         return;   
     }
 
     let deleteTodoEditTodoForm = e.target.closest("#editTodoDeleteTodo"); 
     if (deleteTodoEditTodoForm) {
-        domManager.deleteTodoEditTodoForm();
-        manager.deleteTodo(domManager.todoBeingEdited);
+        domManager.todoDomManager.deleteTodoEditTodoForm();
+        manager.todoManager.deleteTodo(domManager.todoBeingEdited);
         return;   
     }
     /////////////////////////////////////////////////////////
@@ -63,14 +63,14 @@ document.addEventListener("click", (e) => {
     /////////////////////////////////////////////////////////
     let showFullTodo = e.target.closest(".todoNote");
     if(showFullTodo) {
-        const todo = manager.getTodoByID(showFullTodo.dataset.todoID);
-        domManager.showFullTodo(manager, todo);
+        const todo = manager.todoManager.getTodoByID(showFullTodo.dataset.todoID);
+        domManager.todoDomManager.showFullTodo(manager, todo);
         return;
     };
 
     let closeFullTodo = e.target.closest("#todoFullOverlayCloseButton");
     if(closeFullTodo) {
-        domManager.closeFullTodo();
+        domManager.todoDomManager.closeFullTodo();
         return;
     };
     /////////////////////////////////////////////////////////
@@ -79,7 +79,7 @@ document.addEventListener("click", (e) => {
     /////////////////////////////////////////////////////////
     let closeNewTodoForm = e.target.closest("#newTodoCloseForm");
     if (closeNewTodoForm) {
-        domManager.closeNewTodoForm();
+        domManager.todoDomManager.closeNewTodoForm();
         return;
     }
 
@@ -87,8 +87,8 @@ document.addEventListener("click", (e) => {
     if (submitNewTodoForm) {
         const newTodoFields = domManager.submitNewTodoForm(manager);
         
-        const newTodo = manager.addTodo(newTodoFields);
-        domManager.addTodoToDOM(newTodo);
+        const newTodo = manager.todoManager.addTodo(newTodoFields);
+        domManager.todoDomManager.addTodoToDOM(newTodo);
         return;
     };
     /////////////////////////////////////////////////////////
@@ -99,8 +99,8 @@ document.addEventListener("click", (e) => {
     let openEditCategoryForm = e.target.closest(".editCategoryButton"); 
     if (openEditCategoryForm) {
         const categoryID = openEditCategoryForm.parentNode.parentNode.dataset.categoryID;
-        const category = manager.getCategoryByID(categoryID);
-        domManager.openCategoryEditForm(manager, category);
+        const category = manager.categoryManager.getCategoryByID(categoryID);
+        domManager.categoryDomManager.openCategoryEditForm(manager, category);
         return;   
     }
 
@@ -113,15 +113,15 @@ document.addEventListener("click", (e) => {
 
     let deleteCategoryEditForm = e.target.closest("#editCategoryDelete"); 
     if (deleteCategoryEditForm) {
-        domManager.deleteCategoryEditForm();
-        manager.deleteCategory(category);
+        domManager.categoryDomManager.deleteCategoryEditForm();
+        manager.categoryManager.deleteCategory(category);
         return;   
     }
 
     let submitCategoryEditForm = e.target.closest("#editCategoryConfirmForm"); 
     if (submitCategoryEditForm) {
-        const editedCategoryFields = domManager.submitCategoryEditForm();
-        manager.updateCategory(domManager.categoryBeingEdited, editedCategoryFields);
+        const editedCategoryFields = domManager.categoryDomManager.submitCategoryEditForm();
+        manager.categoryManager.updateCategory(domManager.categoryBeingEdited, editedCategoryFields);
         return;   
     }
 
@@ -144,7 +144,7 @@ document.addEventListener("submit", (e) => {
         }
         else {
             e.target.parentElement.removeChild(e.target);
-            domManager.addCategoryToDOM(manager.addCategory(name));
+            domManager.categoryDomManager.addCategoryToDOM(manager.addCategory(name));
             addCategoryButton.style.display = "block";
         }
     }
@@ -153,10 +153,10 @@ document.addEventListener("submit", (e) => {
 // Debug
 ///////////////////////////////////////////////////////////////////////////////
 function doSomething() {
-    console.log(domManager.todoBeingEdited)
-    console.log(domManager.categoryBeingEdited)
-    console.log(manager.categories)
-    console.log(manager.todos)
+    console.log(domManager.todoDomManager.todoBeingEdited)
+    console.log(domManager.categoryDomManager.categoryBeingEdited)
+    console.log(manager.categoryManager.categories)
+    console.log(manager.todoManager.todos)
 }
 
 setInterval(doSomething, 5000); // Time in milliseconds
