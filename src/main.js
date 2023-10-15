@@ -25,7 +25,6 @@ addTodoButton.addEventListener("click", () => {
 });
 
 // Dynamic Click Events (for elements that are not always visible)
-// theres probably a cleaner way to implement this
 /////////////////////////////////////////////////////////////////////////////
 document.addEventListener("click", (e) => {
     
@@ -40,8 +39,8 @@ document.addEventListener("click", (e) => {
 
     let submitEditTodoForm = e.target.closest("#editTodoConfirmForm"); 
     if (submitEditTodoForm) {
-        const editedTodoFields = domManager.submitEditTodoForm(manager);
-        manager.todoDomManager.updateTodo(domManager.todoBeingEdited, editedTodoFields);
+        const editedTodoFields = domManager.todoDomManager.submitEditTodoForm(manager);
+        manager.todoManager.updateTodo(domManager.todoDomManager.todoBeingEdited, editedTodoFields);
         return;   
     }
 
@@ -51,9 +50,9 @@ document.addEventListener("click", (e) => {
         return;   
     }
 
-    let deleteTodoEditTodoForm = e.target.closest("#editTodoDeleteTodo"); 
-    if (deleteTodoEditTodoForm) {
-        domManager.todoDomManager.deleteTodoEditTodoForm();
+    let deleteTodoViaEditTodoForm = e.target.closest("#editTodoDeleteTodo"); 
+    if (deleteTodoViaEditTodoForm) {
+        domManager.todoDomManager.deleteTodoViaEditForm();
         manager.todoManager.deleteTodo(domManager.todoBeingEdited);
         return;   
     }
@@ -85,10 +84,9 @@ document.addEventListener("click", (e) => {
 
     let submitNewTodoForm = e.target.closest("#newTodoConfirmForm");
     if (submitNewTodoForm) {
-        const newTodoFields = domManager.submitNewTodoForm(manager);
-        
+        const newTodoFields = domManager.todoDomManager.submitNewTodoForm(manager);
         const newTodo = manager.todoManager.addTodo(newTodoFields);
-        domManager.todoDomManager.addTodoToDOM(newTodo);
+        domManager.todoDomManager.addTodoToDOM(manager, newTodo);
         return;
     };
     /////////////////////////////////////////////////////////
@@ -125,7 +123,7 @@ document.addEventListener("click", (e) => {
         return;   
     }
 
-    // Move these to dom manager
+    // Move these contents to dom manager
     /////////////////////////////////////////////////////////
 });
 
@@ -144,19 +142,18 @@ document.addEventListener("submit", (e) => {
         }
         else {
             e.target.parentElement.removeChild(e.target);
-            domManager.categoryDomManager.addCategoryToDOM(manager.addCategory(name));
+            domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory(name));
             addCategoryButton.style.display = "block";
         }
     }
 });
 
 // Debug
+
 ///////////////////////////////////////////////////////////////////////////////
 function doSomething() {
-    console.log(domManager.todoDomManager.todoBeingEdited)
-    console.log(domManager.categoryDomManager.categoryBeingEdited)
-    console.log(manager.categoryManager.categories)
-    console.log(manager.todoManager.todos)
+    //console.log(manager.categoryManager.categories)
+    //console.log(manager.todoManager.todos)
 }
 
 setInterval(doSomething, 5000); // Time in milliseconds

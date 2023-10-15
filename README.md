@@ -91,8 +91,9 @@ Repo for the todo list project in the javascript course of the Odin Project
 - Major refactoring of code for clarity and readability
 
 Todo:
-- Understand better why I had to use "this" for the todoBeingEdited but not the todos or categories 
-- Finish adding the edit category color and icon
+- Finish adding the edit category color and icon    
+    - Put color squares in the row and on-click, highlight one of them. On submit, accept that color. Will need id/clss differentiator
+    - Do the same with the icons
 - Make data persist
 - Help button
 - Sort functionality
@@ -102,8 +103,13 @@ Todo:
     - Clear data
 
 Quality:
+- Consider splitting out the event listeners into more specific categories
 - Enforce unable to make new category if exceed numbr of images/colors
-- Fix name v. title in todo and category uses
+- Fix name v. title in todo and category uses (coding style)
 - Enforce name uniqueness in category creation (?)
-- Consider splitting up index js into one for todo, category
 - If due date is passed, make red 
+
+Notes:
+- Understand better why I had to use "this" for the todoBeingEdited but not the todos or categories 
+    - Arrays are passed by reference in js, but primatives aren't. So thats why you can access the updated arrays for the todos and categories but not the single "todoBeingEdited." Its still fuzzy because this is an odd quirk, but maybe just switch to using classes when this is over
+    

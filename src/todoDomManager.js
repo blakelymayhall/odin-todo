@@ -4,12 +4,12 @@ import TodoEditButton from "../src/imgs/icons8-edit-50.png";
 
 const TodoDomManager = () => {
 
-    let todoBeingEdited = null;
+    let todoBeingEdited = [];
 
     const addTodoToDOM = (manager, todo) => {
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
-        todoNote.style.background=todo.category.color;
+        todoNote.style.background = todo.category.color;
         todoNote.dataset.todoID = todo.todoID;
         const pushpin = document.createElement("img");
         pushpin.src = Pushpin;
@@ -79,7 +79,7 @@ const TodoDomManager = () => {
         document.querySelector("#addCategoryButton").style.pointerEvents = "none";
         //
 
-        manager.categories.forEach( (category) => {
+        manager.categoryManager.categories.forEach( (category) => {
             const categoryOption = document.createElement("option");
             categoryOption.value=category.categoryID;
             categoryOption.text=category.name;
@@ -91,7 +91,7 @@ const TodoDomManager = () => {
         const newTodoName = document.forms.newTodoOverlay["newTodoTitle"].value;
         const newTodoDescription = document.forms.newTodoOverlay["newTodoDescription"].value;
         const newTodoDueDate = new Date(document.forms.newTodoOverlay["newTodoDueDate"].value);
-        const newTodoCategory = manager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
+        const newTodoCategory = manager.categoryManager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
 
         if(validTodoInput(newTodoName, newTodoDueDate)) {
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
@@ -125,14 +125,13 @@ const TodoDomManager = () => {
 
     function openEditTodoForm(manager, todo) {
         this.todoBeingEdited = todo;
-        todoBeingEdited = this.todoBeingEdited;
 
         document.querySelector("#editTodoOverlay").style.display = "flex";
-        document.querySelector("#editTodoTitle").value = todoBeingEdited.name;
-        document.querySelector("#editTodoDescription").value = todoBeingEdited.desc;
-        todoBeingEdited.dueDate.setMinutes(todoBeingEdited.dueDate.getMinutes() - todoBeingEdited.dueDate.getTimezoneOffset());
-        document.querySelector("#editTodoDueDate").value = todoBeingEdited.dueDate.toISOString().slice(0,16);
-        manager.categories.forEach( (category) => {
+        document.querySelector("#editTodoTitle").value = this.todoBeingEdited.name;
+        document.querySelector("#editTodoDescription").value = this.todoBeingEdited.desc;
+        this.todoBeingEdited.dueDate.setMinutes(this.todoBeingEdited.dueDate.getMinutes() - this.todoBeingEdited.dueDate.getTimezoneOffset());
+        document.querySelector("#editTodoDueDate").value = this.todoBeingEdited.dueDate.toISOString().slice(0,16);
+        manager.categoryManager.categories.forEach( (category) => {
             const categoryOption = document.createElement("option");
             categoryOption.value=category.categoryID;
             categoryOption.text=category.name;
@@ -143,14 +142,14 @@ const TodoDomManager = () => {
         });
     }
 
-    const submitEditTodoForm = (manager) => {
+    function submitEditTodoForm(manager)  {
         const newTodoName = document.forms.editTodoOverlay["editTodoTitle"].value;
         const newTodoDescription = document.forms.editTodoOverlay["editTodoDescription"].value;
         const newTodoDueDate = new Date(document.forms.editTodoOverlay["editTodoDueDate"].value);
-        const newTodoCategory = manager.getCategoryByID(document.forms.editTodoOverlay["editTodoCategory"].value);
+        const newTodoCategory = manager.categoryManager.getCategoryByID(document.forms.editTodoOverlay["editTodoCategory"].value);
 
         if(validTodoInput(newTodoName, newTodoDueDate, true)) {
-            const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
+            const todoDOM = document.querySelector(`[data-todo-i-d='${this.todoBeingEdited.todoID}']`);
             todoDOM.querySelector(".todoTitleContent").textContent = newTodoName;
             todoDOM.querySelector(".todoDateContent").textContent = manager.GetFormattedDate(newTodoDueDate);
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
@@ -206,6 +205,7 @@ const TodoDomManager = () => {
     };
 
     return {
+        todoBeingEdited,
         addTodoToDOM,
         showFullTodo,
         closeFullTodo,
