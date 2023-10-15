@@ -103,6 +103,7 @@ Todo:
     - Clear data
 
 Quality:
+- Edit todo category didnt seem to work when tested
 - Consider splitting out the event listeners into more specific categories
 - Enforce unable to make new category if exceed numbr of images/colors
 - Fix name v. title in todo and category uses (coding style)
