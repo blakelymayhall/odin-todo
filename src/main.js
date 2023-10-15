@@ -39,8 +39,8 @@ document.addEventListener("click", (e) => {
 
     let submitEditTodoForm = e.target.closest("#editTodoConfirmForm"); 
     if (submitEditTodoForm) {
-        const editedTodoFields = domManager.todoDomManager.submitEditTodoForm(manager);
-        manager.todoManager.updateTodo(domManager.todoDomManager.todoBeingEdited, editedTodoFields);
+        const editedTodo = domManager.todoDomManager.submitEditTodoForm(manager);
+        manager.todoManager.updateTodo(editedTodo.todoBeingEdited, editedTodo.editedTodoFields);
         return;   
     }
 
@@ -118,12 +118,10 @@ document.addEventListener("click", (e) => {
 
     let submitCategoryEditForm = e.target.closest("#editCategoryConfirmForm"); 
     if (submitCategoryEditForm) {
-        const editedCategoryFields = domManager.categoryDomManager.submitCategoryEditForm();
-        manager.categoryManager.updateCategory(domManager.categoryBeingEdited, editedCategoryFields);
+        const editedCategory = domManager.categoryDomManager.submitCategoryEditForm();
+        manager.categoryManager.updateCategory(editedCategory.categoryBeingEdited, editedCategory.editedCategoryFields);
         return;   
     }
-
-    // Move these contents to dom manager
     /////////////////////////////////////////////////////////
 });
 
@@ -152,8 +150,9 @@ document.addEventListener("submit", (e) => {
 
 ///////////////////////////////////////////////////////////////////////////////
 function doSomething() {
-    //console.log(manager.categoryManager.categories)
-    //console.log(manager.todoManager.todos)
+    //console.log(domManager.todoDomManager.getTodoBeingEdited())
+    console.log(manager.categoryManager.categories)
+    console.log(manager.todoManager.todos)
 }
 
 setInterval(doSomething, 5000); // Time in milliseconds

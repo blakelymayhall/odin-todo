@@ -44,8 +44,7 @@ const CategoryDomManager = () => {
     }
 
     function openCategoryEditForm(manager, category) {
-        this.categoryBeingEdited = category;
-        categoryBeingEdited = this.categoryBeingEdited;
+        categoryBeingEdited = category;
 
         document.querySelector("#editCategoryOverlay").style.display = "flex";
         document.querySelector("#editCategoryTitle").value = categoryBeingEdited.name;
@@ -63,7 +62,10 @@ const CategoryDomManager = () => {
             const category = document.querySelector(`[data-category-i-d='${categoryBeingEdited.categoryID}']`);
             category.firstChild.textContent = newCategoryName;
             return {
-                newCategoryName
+                categoryBeingEdited: categoryBeingEdited,
+                editedCategoryFields: {
+                    newCategoryName
+                }
             }
         }
         else {
