@@ -151,7 +151,12 @@ const TodoDomManager = () => {
             const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
             todoDOM.querySelector(".todoTitleContent").textContent = newTodoName;
             todoDOM.querySelector(".todoDateContent").textContent = manager.GetFormattedDate(newTodoDueDate);
+            todoDOM.querySelector(".todoCategory").src = newTodoCategory.symbol;
+            todoDOM.style.background = newTodoCategory.color;
+
+            // Re-enable clicks -- make function 
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
+
             document.querySelector("#editTodoOverlay").style.display = "none";
             document.forms.editTodoOverlay.reset();
             const toDelete = document.querySelectorAll("#editTodoCategory option")
@@ -206,8 +211,19 @@ const TodoDomManager = () => {
         return true;
     };
 
+    const updateTodosAfterCategoryEdit = (todos) => {
+        todos.forEach( (todo) => {
+            
+            const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
+            todoDOM.querySelector(".todoCategory").src = todo.category.symbol;
+            todoDOM.style.background = todo.category.color;
+            console.log(todoDOM)
+            console.log( todo.category.symbol)
+            console.log(todo.category.color)
+        });
+    };
+
     return {
-        todoBeingEdited,
         addTodoToDOM,
         showFullTodo,
         closeFullTodo,
@@ -217,7 +233,8 @@ const TodoDomManager = () => {
         openEditTodoForm,
         submitEditTodoForm,
         closeEditTodoForm,
-        deleteTodoViaEditForm
+        deleteTodoViaEditForm,
+        updateTodosAfterCategoryEdit
     }
 };
 

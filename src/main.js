@@ -104,8 +104,7 @@ document.addEventListener("click", (e) => {
 
     let closeCategoryEditForm = e.target.closest("#editCategoryCloseForm"); 
     if (closeCategoryEditForm) {
-        document.querySelector("#editCategoryOverlay").style.display = "none";
-        document.forms.editCategoryOverlay.reset();
+        domManager.categoryDomManager.closeCategoryEditForm();
         return;   
     }
 
@@ -116,10 +115,23 @@ document.addEventListener("click", (e) => {
         return;   
     }
 
+    let colorSquareSelected = e.target.closest(".colorSquare");
+    if (colorSquareSelected) {
+        domManager.categoryDomManager.colorSelectedEditForm(colorSquareSelected);
+        return;
+    }
+
+    let iconSquareSelected = e.target.closest(".iconPickerIcon");
+    if (iconSquareSelected) {
+        domManager.categoryDomManager.iconSelectedEditForm(iconSquareSelected);
+        return;
+    }
+
     let submitCategoryEditForm = e.target.closest("#editCategoryConfirmForm"); 
     if (submitCategoryEditForm) {
         const editedCategory = domManager.categoryDomManager.submitCategoryEditForm();
         manager.categoryManager.updateCategory(editedCategory.categoryBeingEdited, editedCategory.editedCategoryFields);
+        domManager.todoDomManager.updateTodosAfterCategoryEdit(manager.todoManager.getTodosByCategoryID(editedCategory.categoryBeingEdited.categoryID));
         return;   
     }
     /////////////////////////////////////////////////////////
@@ -151,8 +163,8 @@ document.addEventListener("submit", (e) => {
 ///////////////////////////////////////////////////////////////////////////////
 function doSomething() {
     //console.log(domManager.todoDomManager.getTodoBeingEdited())
-    console.log(manager.categoryManager.categories)
-    console.log(manager.todoManager.todos)
+    //console.log(manager.categoryManager.categories)
+    //console.log(manager.todoManager.todos)
 }
 
 setInterval(doSomething, 5000); // Time in milliseconds

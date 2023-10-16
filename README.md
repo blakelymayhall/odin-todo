@@ -90,10 +90,13 @@ Repo for the todo list project in the javascript course of the Odin Project
 10/14/23
 - Major refactoring of code for clarity and readability
 
+10/15/23
+- Todo edit category does work, but needed update so that the category image and color is updated
+- Nearly finished adding edit todo functionality. It was bigger than I thought, since you have to also update the board of todos after submission
+    - Added color and icon picker
+
 Todo:
-- Finish adding the edit category color and icon    
-    - Put color squares in the row and on-click, highlight one of them. On submit, accept that color. Will need id/clss differentiator
-    - Do the same with the icons
+- Get the todo board updated after edit category
 - Make data persist
 - Help button
 - Sort functionality
@@ -103,8 +106,7 @@ Todo:
     - Clear data
 
 Quality:
-- Edit todo category didnt seem to work when tested
-- Consider splitting out the event listeners into more specific categories
+- Consider splitting out the event listeners into more specific categories (in own files?)
 - Enforce unable to make new category if exceed numbr of images/colors
 - Fix name v. title in todo and category uses (coding style)
 - Enforce name uniqueness in category creation (?)

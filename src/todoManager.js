@@ -34,12 +34,19 @@ const TodoManager = () => {
         });
     };
 
+    const getTodosByCategoryID = (id) => {
+        return todos.filter( (todo) => {
+            return todo.category.categoryID == id;
+        });
+    };
+
     return {
         todos,
         addTodo,
         updateTodo,
         deleteTodo,
-        getTodoByID
+        getTodoByID,
+        getTodosByCategoryID
     }
 
 };

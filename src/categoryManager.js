@@ -10,17 +10,16 @@ import { genID } from "./manager";
 
 const CategoryManager = () => {
     
+    let categoryImages = [GhostCategory,ShoeCategory,ToyCategory,CarCategory,BookCategory,DogCategory,WineCategory];
+    let categoryColors = ["Aqua","Aquamarine","BurlyWood","LightGray","PowderBlue","Yellow","HoneyDew"]
+
     let categories = [];
-    const categoryImages = [GhostCategory,ShoeCategory,ToyCategory,CarCategory,BookCategory,DogCategory,WineCategory];
-    let availableCategoryImages = categoryImages;   // do we need the first variable? if a cat. is deleted we could push onto here?
-    const categoryColors = ["Aqua","Aquamarine","BurlyWood","LightGray","PowderBlue","Yellow","HoneyDew"]
-    let availableCategoryColors = categoryColors;
 
     const addCategory = (name) => {
-        let rndIdx = Math.floor(Math.random()*availableCategoryImages.length);
-        let newCategory = Category(name, availableCategoryColors[rndIdx], availableCategoryImages[rndIdx]);
-        availableCategoryImages.splice(rndIdx,1);
-        availableCategoryColors.splice(rndIdx,1);
+        let rndIdx = Math.floor(Math.random()*categoryImages.length);
+        let newCategory = Category(name, categoryColors[rndIdx], categoryImages[rndIdx]);
+        categoryImages.splice(rndIdx,1);
+        categoryColors.splice(rndIdx,1);
         categories.push(newCategory);
         return newCategory;
     };
@@ -39,17 +38,23 @@ const CategoryManager = () => {
 
     const updateCategory = (categoryBeingEdited, editedCategoryFields) => {
         categoryBeingEdited.name = editedCategoryFields.newCategoryName;
+        categoryBeingEdited.color = editedCategoryFields.newCategoryColor;
+        categoryBeingEdited.icon = editedCategoryFields.newCategoryIcon;
     };
 
     const deleteCategory = (categoryToDelete) => {
         const categoryIdx = categories.indexOf( (category) => {
             return category.categoryID == categoryToDelete;
         });
+        categoryImages.push(categoryToDelete.symbol);
+        categoryColors.push(categoryToDelete.color);
         categories.splice(categoryIdx,1);
     };
 
     return {
         categories,
+        categoryImages,
+        categoryColors,
         addCategory,
         getCategoryByName,
         getCategoryByID,
