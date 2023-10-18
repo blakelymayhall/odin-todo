@@ -40,8 +40,9 @@ document.addEventListener("click", (e) => {
 
     let submitEditTodoForm = e.target.closest("#editTodoConfirmForm"); 
     if (submitEditTodoForm) {
-        const editedTodo = domManager.todoDomManager.submitEditTodoForm(manager);
-        manager.todoManager.updateTodo(editedTodo.todoBeingEdited, editedTodo.editedTodoFields);
+        const todoBeingEdited = domManager.todoDomManager.getTodoBeingEdited();
+        const editedTodoFields = domManager.todoDomManager.submitEditTodoForm(manager);
+        manager.todoManager.updateTodo(todoBeingEdited, editedTodoFields);
         return;   
     }
 
@@ -53,7 +54,8 @@ document.addEventListener("click", (e) => {
 
     let deleteTodoViaEditTodoForm = e.target.closest("#editTodoDeleteTodo"); 
     if (deleteTodoViaEditTodoForm) {
-        const todoToDelete = domManager.todoDomManager.deleteTodoViaEditForm();
+        const todoToDelete = domManager.todoDomManager.getTodoBeingEdited();
+        domManager.todoDomManager.deleteTodoViaEditForm();
         manager.todoManager.deleteTodo(todoToDelete);
         return;   
     }
@@ -111,7 +113,8 @@ document.addEventListener("click", (e) => {
 
     let deleteCategoryEditForm = e.target.closest("#editCategoryDelete"); 
     if (deleteCategoryEditForm) {
-        const categoryToDelete = domManager.categoryDomManager.deleteCategoryEditForm();
+        const categoryToDelete = domManager.categoryDomManager.getCategoryBeingEdited();
+        domManager.categoryDomManager.deleteCategoryEditForm();
         manager.categoryManager.deleteCategory(categoryToDelete);
         return;   
     }
@@ -130,12 +133,11 @@ document.addEventListener("click", (e) => {
 
     let submitCategoryEditForm = e.target.closest("#editCategoryConfirmForm"); 
     if (submitCategoryEditForm) {
-        const editedCategory = domManager.categoryDomManager.submitCategoryEditForm();
-        manager.categoryManager.updateCategory(
-            editedCategory.categoryBeingEdited, editedCategory.editedCategoryFields);
+        const categoryBeingEdited = domManager.categoryDomManager.getCategoryBeingEdited();
+        const editedCategoryFields = domManager.categoryDomManager.submitCategoryEditForm();
+        manager.categoryManager.updateCategory(categoryBeingEdited, editedCategoryFields);
         domManager.todoDomManager.updateTodosAfterCategoryEdit(
-            manager.todoManager.getTodosByCategoryID(editedCategory.categoryBeingEdited.categoryID));
-
+            manager.todoManager.getTodosByCategoryID(categoryBeingEdited.categoryID));
         return;   
     }
     /////////////////////////////////////////////////////////

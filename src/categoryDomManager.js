@@ -127,7 +127,6 @@ const CategoryDomManager = () => {
 
             closeCategoryEditForm();
             return {
-                categoryBeingEdited: categoryBeingEdited,
                 editedCategoryFields: {
                     newCategoryName: newCategoryName,
                     newCategoryColorIndex: newColorIndex,

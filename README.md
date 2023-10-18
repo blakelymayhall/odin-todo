@@ -99,10 +99,11 @@ Repo for the todo list project in the javascript course of the Odin Project
     - Allow no selection of color / icon 
     - Delete functionality
     - Remove/Add colors and symbols
-
-Todo:
 - Refactor to use the new getCategoryBeingEdited function
     - Do the same for todos
+
+Todo:
+- Test the new getCategoryBeingEdited function
 - Cannot delete categories if existing todos
 - Focus on input
 - Make data persist

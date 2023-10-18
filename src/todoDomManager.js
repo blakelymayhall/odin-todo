@@ -122,7 +122,11 @@ const TodoDomManager = () => {
         });
     };
 
-    function openEditTodoForm(manager, todo) {
+    const getTodoBeingEdited = () => {
+        return todoBeingEdited;
+    }
+
+    const openEditTodoForm = (manager, todo) => {
         todoBeingEdited = todo;
 
         document.querySelector("#editTodoOverlay").style.display = "flex";
@@ -141,7 +145,7 @@ const TodoDomManager = () => {
         });
     }
 
-    function submitEditTodoForm(manager)  {
+    const submitEditTodoForm = (manager) => {
         const newTodoName = document.forms.editTodoOverlay["editTodoTitle"].value;
         const newTodoDescription = document.forms.editTodoOverlay["editTodoDescription"].value;
         const newTodoDueDate = new Date(document.forms.editTodoOverlay["editTodoDueDate"].value);
@@ -157,15 +161,9 @@ const TodoDomManager = () => {
             // Re-enable clicks -- make function 
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
 
-            document.querySelector("#editTodoOverlay").style.display = "none";
-            document.forms.editTodoOverlay.reset();
-            const toDelete = document.querySelectorAll("#editTodoCategory option")
-            toDelete.forEach((e) => {
-                e.parentElement.removeChild(e);
-            });
-            
+            closeEditTodoForm();
+    
             return {
-                todoBeingEdited: todoBeingEdited,
                 editedTodoFields: { 
                     newTodoName, 
                     newTodoDescription, 
@@ -188,11 +186,9 @@ const TodoDomManager = () => {
     };
 
     const deleteTodoViaEditForm = () => {
-        document.querySelector("#editTodoOverlay").style.display = "none";
-        document.forms.editTodoOverlay.reset();
+        closeEditTodoForm();
         const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
         todoDOM.parentNode.removeChild(todoDOM);
-        return todoBeingEdited;
     };
 
     function validTodoInput(newTodoName, newTodoDueDate, isEdit = false) {
@@ -227,6 +223,7 @@ const TodoDomManager = () => {
         openNewTodoForm,
         submitNewTodoForm,
         closeNewTodoForm,
+        getTodoBeingEdited,
         openEditTodoForm,
         submitEditTodoForm,
         closeEditTodoForm,
