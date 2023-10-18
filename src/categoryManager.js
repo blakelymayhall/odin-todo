@@ -38,8 +38,18 @@ const CategoryManager = () => {
 
     const updateCategory = (categoryBeingEdited, editedCategoryFields) => {
         categoryBeingEdited.name = editedCategoryFields.newCategoryName;
-        categoryBeingEdited.color = editedCategoryFields.newCategoryColor;
-        categoryBeingEdited.icon = editedCategoryFields.newCategoryIcon;
+
+        if (editedCategoryFields.newCategoryColorIndex != null) {
+            categoryColors.push(categoryBeingEdited.color);
+            categoryBeingEdited.color = categoryColors[editedCategoryFields.newCategoryColorIndex];
+            categoryColors.splice(categoryColors.indexOf(categoryBeingEdited.color),1);
+        }
+
+        if (editedCategoryFields.newCategorySymbolIndex != null) {
+            categoryImages.push(categoryBeingEdited.symbol);
+            categoryBeingEdited.symbol = categoryImages[editedCategoryFields.newCategorySymbolIndex];
+            categoryImages.splice(categoryImages.indexOf(categoryBeingEdited.symbol),1);
+        }
     };
 
     const deleteCategory = (categoryToDelete) => {
@@ -72,7 +82,7 @@ const Category = (name, color, symbol) => {
         name,
         color,
         symbol
-    }
+    };
 };
 
 export {CategoryManager, Category}

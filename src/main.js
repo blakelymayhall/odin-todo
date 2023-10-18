@@ -3,6 +3,7 @@ import { Manager } from './manager';
 import "./style/styles.css";
 
 // Initial setup
+/////////////////////////////////////////////////////////////////////////////
 const manager = Manager();
 const domManager = DomManager();
 domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Default"));
@@ -52,8 +53,8 @@ document.addEventListener("click", (e) => {
 
     let deleteTodoViaEditTodoForm = e.target.closest("#editTodoDeleteTodo"); 
     if (deleteTodoViaEditTodoForm) {
-        domManager.todoDomManager.deleteTodoViaEditForm();
-        manager.todoManager.deleteTodo(domManager.todoBeingEdited);
+        const todoToDelete = domManager.todoDomManager.deleteTodoViaEditForm();
+        manager.todoManager.deleteTodo(todoToDelete);
         return;   
     }
     /////////////////////////////////////////////////////////
@@ -110,8 +111,8 @@ document.addEventListener("click", (e) => {
 
     let deleteCategoryEditForm = e.target.closest("#editCategoryDelete"); 
     if (deleteCategoryEditForm) {
-        domManager.categoryDomManager.deleteCategoryEditForm();
-        manager.categoryManager.deleteCategory(category);
+        const categoryToDelete = domManager.categoryDomManager.deleteCategoryEditForm();
+        manager.categoryManager.deleteCategory(categoryToDelete);
         return;   
     }
 
@@ -121,17 +122,20 @@ document.addEventListener("click", (e) => {
         return;
     }
 
-    let iconSquareSelected = e.target.closest(".iconPickerIcon");
-    if (iconSquareSelected) {
-        domManager.categoryDomManager.iconSelectedEditForm(iconSquareSelected);
+    let symbolSquareSelected = e.target.closest(".symbolPickerIcon");
+    if (symbolSquareSelected) {
+        domManager.categoryDomManager.symbolSelectedEditForm(symbolSquareSelected);
         return;
     }
 
     let submitCategoryEditForm = e.target.closest("#editCategoryConfirmForm"); 
     if (submitCategoryEditForm) {
         const editedCategory = domManager.categoryDomManager.submitCategoryEditForm();
-        manager.categoryManager.updateCategory(editedCategory.categoryBeingEdited, editedCategory.editedCategoryFields);
-        domManager.todoDomManager.updateTodosAfterCategoryEdit(manager.todoManager.getTodosByCategoryID(editedCategory.categoryBeingEdited.categoryID));
+        manager.categoryManager.updateCategory(
+            editedCategory.categoryBeingEdited, editedCategory.editedCategoryFields);
+        domManager.todoDomManager.updateTodosAfterCategoryEdit(
+            manager.todoManager.getTodosByCategoryID(editedCategory.categoryBeingEdited.categoryID));
+
         return;   
     }
     /////////////////////////////////////////////////////////

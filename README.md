@@ -92,27 +92,38 @@ Repo for the todo list project in the javascript course of the Odin Project
 
 10/15/23
 - Todo edit category does work, but needed update so that the category image and color is updated
-- Nearly finished adding edit todo functionality. It was bigger than I thought, since you have to also update the board of todos after submission
+- Nearly finished adding edit category functionality. 
+    - It was bigger than I thought, since you have to also update the board of todos after submission
     - Added color and icon picker
+- Get the todo board updated after edit category
+    - Allow no selection of color / icon 
+    - Delete functionality
+    - Remove/Add colors and symbols
 
 Todo:
-- Get the todo board updated after edit category
+- Refactor to use the new getCategoryBeingEdited function
+    - Do the same for todos
+- Cannot delete categories if existing todos
+- Focus on input
 - Make data persist
 - Help button
 - Sort functionality
 - Filter functionality
 - Search functionality
+- Enforce name uniqueness in category creation
+- Protect the default category
+- Enforce unable to make new category if exceed numbr of images/colors
+- If due date is passed, make red 
 - Add settings to the page settings 
     - Clear data
 
-Quality:
+Code Quality:
 - Consider splitting out the event listeners into more specific categories (in own files?)
-- Enforce unable to make new category if exceed numbr of images/colors
 - Fix name v. title in todo and category uses (coding style)
-- Enforce name uniqueness in category creation (?)
-- If due date is passed, make red 
 
 Notes:
 - Understand better why I had to use "this" for the todoBeingEdited but not the todos or categories 
-    - Arrays are passed by reference in js, but primatives aren't. So thats why you can access the updated arrays for the todos and categories but not the single "todoBeingEdited." Its still fuzzy because this is an odd quirk, but maybe just switch to using classes when this is over
+    - Arrays are passed by reference in js, but primatives aren't. 
+    - So thats why you can access the updated arrays for the todos and categories but not the single "todoBeingEdited." 
+    - Its still fuzzy because this is an odd quirk, but maybe just switch to using classes when this is over
     

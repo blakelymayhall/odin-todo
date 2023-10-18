@@ -192,6 +192,7 @@ const TodoDomManager = () => {
         document.forms.editTodoOverlay.reset();
         const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
         todoDOM.parentNode.removeChild(todoDOM);
+        return todoBeingEdited;
     };
 
     function validTodoInput(newTodoName, newTodoDueDate, isEdit = false) {
@@ -213,13 +214,9 @@ const TodoDomManager = () => {
 
     const updateTodosAfterCategoryEdit = (todos) => {
         todos.forEach( (todo) => {
-            
             const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
             todoDOM.querySelector(".todoCategory").src = todo.category.symbol;
             todoDOM.style.background = todo.category.color;
-            console.log(todoDOM)
-            console.log( todo.category.symbol)
-            console.log(todo.category.color)
         });
     };
 

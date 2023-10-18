@@ -368,7 +368,7 @@ ul {
     margin-top: 5px;
 }
 
-#colorPicker, #iconPicker {
+#colorPicker, #symbolPicker {
     display: flex;
     justify-content:left;
     align-items: center;
@@ -383,7 +383,7 @@ ul {
     background: red;
 }
 
-.iconPickerIcon {
+.symbolPickerIcon {
     width: 35px;
     height: 35px;
 }

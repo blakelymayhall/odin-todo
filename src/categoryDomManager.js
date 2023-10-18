@@ -3,7 +3,7 @@ import EditCategoryButton from "../src/imgs/icons8-settings-30.png";
 const CategoryDomManager = () => {
     let categoryBeingEdited = null;
     let colorSelected = null;
-    let iconSelected = null;
+    let symbolSelected = null;
 
     const addCategoryToDOM = (category) => {
         const categoryRow = document.createElement("li");
@@ -51,26 +51,32 @@ const CategoryDomManager = () => {
         document.querySelector("#editCategoryOverlay").style.display = "flex";
         document.querySelector("#editCategoryTitle").value = categoryBeingEdited.name;
         const colorPickerContainer = document.querySelector("#colorPicker");
-        manager.categoryManager.categoryColors.forEach( (color) => {
+        manager.categoryManager.categoryColors.forEach( (color, index) => {
             const colorSquare = document.createElement("div");
             colorSquare.classList.add("colorSquare");
             colorSquare.style.background = color;
+            colorSquare.dataset.index = index;
             colorPickerContainer.appendChild(colorSquare);
         });
 
-        const iconPickerContainer = document.querySelector("#iconPicker");
-        manager.categoryManager.categoryImages.forEach( (icon) => {
-            const iconSquare = document.createElement("img");
-            iconSquare.classList.add("iconPickerIcon");
-            iconSquare.src = icon;
-            iconPickerContainer.appendChild(iconSquare);
+        const symbolPickerContainer = document.querySelector("#symbolPicker");
+        manager.categoryManager.categoryImages.forEach( (symbol, index) => {
+            const symbolSquare = document.createElement("img");
+            symbolSquare.classList.add("symbolPickerIcon");
+            symbolSquare.src = symbol;
+            symbolSquare.dataset.index = index;
+            symbolPickerContainer.appendChild(symbolSquare);
         });
+    };
+
+    const getCategoryBeingEdited = () => {
+        return categoryBeingEdited;
     };
 
     const closeCategoryEditForm = () => {
         document.querySelector("#editCategoryOverlay").style.display = "none";
         document.forms.editCategoryOverlay.reset();
-        const toDelete = document.querySelectorAll(".colorSquare, .iconPickerIcon");
+        const toDelete = document.querySelectorAll(".colorSquare, .symbolPickerIcon");
         toDelete.forEach((e) => {
             e.parentElement.removeChild(e);
         });
@@ -90,18 +96,18 @@ const CategoryDomManager = () => {
         colorSquare.style.border = "thick solid #0000FF";
     };
 
-    const iconSelectedEditForm = (iconSquare) => {
-        if (iconSelected != null) {
-            iconSelected.style.border = "none";
+    const symbolSelectedEditForm = (symbolSquare) => {
+        if (symbolSelected != null) {
+            symbolSelected.style.border = "none";
         } 
         
-        if (iconSelected == iconSquare) {
-            iconSelected = null;
+        if (symbolSelected == symbolSquare) {
+            symbolSelected = null;
             return;
         }
 
-        iconSelected = iconSquare;
-        iconSelected.style.border = "thick solid #0000FF";
+        symbolSelected = symbolSquare;
+        symbolSelected.style.border = "thick solid #0000FF";
     };
 
     const submitCategoryEditForm = () => {
@@ -112,17 +118,20 @@ const CategoryDomManager = () => {
             document.forms.editCategoryOverlay.reset();
             const category = document.querySelector(`[data-category-i-d='${categoryBeingEdited.categoryID}']`);
             category.firstChild.textContent = newCategoryName;
-            const newColor = colorSelected == null ? null : colorSelected.style.background;
-            const newIcon = iconSelected == null ? null : iconSelected.src;
+            const newColorIndex = colorSelected == null ? null : colorSelected.dataset.index;
+            const newSymbolIndex = symbolSelected == null ? null : symbolSelected.dataset.index;
             const categoryIcon = category.querySelector(".categoryRowCategoryIcon");
-            categoryIcon.src = newIcon;
+            if (newSymbolIndex != null) {
+                categoryIcon.src = symbolSelected.src;
+            }
+
             closeCategoryEditForm();
             return {
                 categoryBeingEdited: categoryBeingEdited,
                 editedCategoryFields: {
                     newCategoryName: newCategoryName,
-                    newCategoryColor: newColor,
-                    newCategoryIcon: newIcon
+                    newCategoryColorIndex: newColorIndex,
+                    newCategorySymbolIndex: newSymbolIndex
                 }
             }
         }
@@ -133,20 +142,23 @@ const CategoryDomManager = () => {
     };
 
     const deleteCategoryEditForm = () => {
-        document.querySelector("#editCategoryOverlay").style.display = "none";
-        document.forms.editCategoryOverlay.reset();
         const category = document.querySelector(`[data-category-i-d='${categoryBeingEdited.categoryID}']`);
+        if (false) {
+            return null;
+        }
         category.parentNode.removeChild(category);
         closeCategoryEditForm();
+        return categoryBeingEdited;
     };
 
     return {
         addCategoryToDOM,
         getNewCategory,
+        getCategoryBeingEdited,
         openCategoryEditForm,
         closeCategoryEditForm,
         colorSelectedEditForm,
-        iconSelectedEditForm,
+        symbolSelectedEditForm,
         submitCategoryEditForm,
         deleteCategoryEditForm
     }
