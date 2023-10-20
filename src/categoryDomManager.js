@@ -127,11 +127,9 @@ const CategoryDomManager = () => {
 
             closeCategoryEditForm();
             return {
-                editedCategoryFields: {
-                    newCategoryName: newCategoryName,
-                    newCategoryColorIndex: newColorIndex,
-                    newCategorySymbolIndex: newSymbolIndex
-                }
+                newCategoryName: newCategoryName,
+                newCategoryColorIndex: newColorIndex,
+                newCategorySymbolIndex: newSymbolIndex
             }
         }
         else {

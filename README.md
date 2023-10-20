@@ -90,7 +90,7 @@ Repo for the todo list project in the javascript course of the Odin Project
 10/14/23
 - Major refactoring of code for clarity and readability
 
-10/15/23
+10/15/23 - 10/18/23
 - Todo edit category does work, but needed update so that the category image and color is updated
 - Nearly finished adding edit category functionality. 
     - It was bigger than I thought, since you have to also update the board of todos after submission
@@ -102,21 +102,38 @@ Repo for the todo list project in the javascript course of the Odin Project
 - Refactor to use the new getCategoryBeingEdited function
     - Do the same for todos
 
-Todo:
-- Test the new getCategoryBeingEdited function
+10/19/23
 - Cannot delete categories if existing todos
-- Focus on input
-- Make data persist
+- Prevent clicking buttons while in form
+- If due date is passed, make red 
+    - Use the timer to run this code
 - Help button
-- Sort functionality
-- Filter functionality
-- Search functionality
+- Begin implementing data persistance 
+
+Todo:
+- Move help to toolbarDomManager
+- Move addTodo to toolbarDomManager
+- Make data persist
+- Sort functionality - toolbarDomManager
+    - Sort by date 
+    - Sort by name 
+- Completed functionality
+    - Hover over and make green - css
+    - Todo disappears on click - toolbarDomManager
+- Filter functionality - toolbarDomManager
+    - No filter
+    - Filter by category
+    - Filter by completed
+- Search functionality - toolbarDomManager
+    - This is the same as filter but by name only 
+- Enforce unable to make new category if exceed numbr of images/colors - categoryManager
+- Add settings to the page settings - toolbarDomManager
+    - Clear data -- categoryManager / todoManager
+
+Not Neccessary, but Nice:
+- Focus on input to allow tabbing
 - Enforce name uniqueness in category creation
 - Protect the default category
-- Enforce unable to make new category if exceed numbr of images/colors
-- If due date is passed, make red 
-- Add settings to the page settings 
-    - Clear data
 
 Code Quality:
 - Consider splitting out the event listeners into more specific categories (in own files?)

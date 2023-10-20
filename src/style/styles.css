@@ -218,10 +218,10 @@ ul {
     width: 150px;
 }
 
-#todoFullOverlay {
+#todoFullOverlay, #helpOverlay {
     position: absolute;
     z-index: 1;
-    background: red;
+    background: rgb(228, 209, 147);;
     border-color: black;
     border-style: solid;
     border-width: 2px;
@@ -245,7 +245,7 @@ ul {
     gap: 5px;
 }
 
-#todoFullOverlayCloseButton {
+#todoFullOverlayCloseButton, #helpOverlayCloseButton {
     position: absolute;
     border-style: solid;
     border-color: black;
@@ -262,7 +262,7 @@ ul {
     color: white;
 }
 
-#todoFullOverlayCloseButton:hover {
+#todoFullOverlayCloseButton:hover, #helpOverlayCloseButton:hover {
     cursor: pointer;
 }
 

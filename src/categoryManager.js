@@ -21,6 +21,7 @@ const CategoryManager = () => {
         categoryImages.splice(rndIdx,1);
         categoryColors.splice(rndIdx,1);
         categories.push(newCategory);
+        localStorage.setItem("categoryList", JSON.stringify(categories));
         return newCategory;
     };
 
@@ -50,6 +51,18 @@ const CategoryManager = () => {
             categoryBeingEdited.symbol = categoryImages[editedCategoryFields.newCategorySymbolIndex];
             categoryImages.splice(categoryImages.indexOf(categoryBeingEdited.symbol),1);
         }
+        
+        localStorage.setItem("categoryList", JSON.stringify(categories));
+    };
+
+    const canDelete = (categoryToDelete, todos) => {
+        let canDelete = true;
+        todos.forEach( (todo) => {
+            if (todo.category == categoryToDelete) {
+                canDelete = false;
+            }
+        });
+        return canDelete;
     };
 
     const deleteCategory = (categoryToDelete) => {
@@ -59,6 +72,7 @@ const CategoryManager = () => {
         categoryImages.push(categoryToDelete.symbol);
         categoryColors.push(categoryToDelete.color);
         categories.splice(categoryIdx,1);
+        localStorage.setItem("categoryList", JSON.stringify(categories));
     };
 
     return {
@@ -69,6 +83,7 @@ const CategoryManager = () => {
         getCategoryByName,
         getCategoryByID,
         updateCategory,
+        canDelete,
         deleteCategory
     };
 };

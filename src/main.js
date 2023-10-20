@@ -6,23 +6,51 @@ import "./style/styles.css";
 /////////////////////////////////////////////////////////////////////////////
 const manager = Manager();
 const domManager = DomManager();
+
+manager.loadState();
+
 domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Default"));
-domManager.todoDomManager.addTodoToDOM(manager, manager.todoManager.addTodo( {
-    newTodoName: "Click Me!",
-    newTodoDescription: "",
-    newTodoDueDate: new Date(),
-    newTodoCategory: manager.categoryManager.getCategoryByName("Default")}));
+domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Test"));
+domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Test2"));
+/*
+domManager.todoDomManager.addTodoToDOM(
+    manager, 
+    manager.todoManager.addTodo( {
+        newTodoName: "Click Me!",
+        newTodoDescription: "",
+        newTodoDueDate: new Date(),
+        newTodoCategory: manager.categoryManager.getCategoryByName("Default")}
+    )
+);
+domManager.todoDomManager.addTodoToDOM(
+    manager, 
+    manager.todoManager.addTodo( {
+        newTodoName: "Test!",
+        newTodoDescription: "Test This is a Test",
+        newTodoDueDate: new Date(),
+        newTodoCategory: manager.categoryManager.getCategoryByName("Test")}
+    )
+);
+*/
 
 // Click events
 /////////////////////////////////////////////////////////////////////////////
 const addCategoryButton = document.querySelector("#addCategoryButton");
 addCategoryButton.addEventListener("click", () => {
+    domManager.toggleButtons();
     domManager.categoryDomManager.getNewCategory();
 });
 
 const addTodoButton = document.querySelector("#addToDoButton");
 addTodoButton.addEventListener("click", () => {
+    domManager.toggleButtons();
     domManager.todoDomManager.openNewTodoForm(manager);
+});
+
+const helpButton = document.querySelector("#helpButton");
+helpButton.addEventListener("click", () => {
+    domManager.toggleButtons();
+    domManager.openHelpMessage();
 });
 
 // Dynamic Click Events (for elements that are not always visible)
@@ -32,7 +60,8 @@ document.addEventListener("click", (e) => {
     // Edit Todo
     /////////////////////////////////////////////////////////
     let openEditTodoForm = e.target.closest(".todoEditButton");
-    if(openEditTodoForm) {
+    if (openEditTodoForm) {
+        domManager.toggleButtons();
         const todo = manager.todoManager.getTodoByID(openEditTodoForm.parentNode.parentNode.dataset.todoID);
         domManager.todoDomManager.openEditTodoForm(manager, todo);
         return;
@@ -43,12 +72,14 @@ document.addEventListener("click", (e) => {
         const todoBeingEdited = domManager.todoDomManager.getTodoBeingEdited();
         const editedTodoFields = domManager.todoDomManager.submitEditTodoForm(manager);
         manager.todoManager.updateTodo(todoBeingEdited, editedTodoFields);
+        domManager.toggleButtons();
         return;   
     }
 
     let closeEditTodoForm = e.target.closest("#editTodoCloseForm"); 
     if (closeEditTodoForm) {
         domManager.todoDomManager.closeEditTodoForm();
+        domManager.toggleButtons();
         return;   
     }
 
@@ -57,6 +88,7 @@ document.addEventListener("click", (e) => {
         const todoToDelete = domManager.todoDomManager.getTodoBeingEdited();
         domManager.todoDomManager.deleteTodoViaEditForm();
         manager.todoManager.deleteTodo(todoToDelete);
+        domManager.toggleButtons();
         return;   
     }
     /////////////////////////////////////////////////////////
@@ -64,15 +96,17 @@ document.addEventListener("click", (e) => {
     // Full Todo
     /////////////////////////////////////////////////////////
     let showFullTodo = e.target.closest(".todoNote");
-    if(showFullTodo) {
+    if (showFullTodo) {
+        domManager.toggleButtons();
         const todo = manager.todoManager.getTodoByID(showFullTodo.dataset.todoID);
         domManager.todoDomManager.showFullTodo(manager, todo);
         return;
     };
 
     let closeFullTodo = e.target.closest("#todoFullOverlayCloseButton");
-    if(closeFullTodo) {
+    if (closeFullTodo) {
         domManager.todoDomManager.closeFullTodo();
+        domManager.toggleButtons();
         return;
     };
     /////////////////////////////////////////////////////////
@@ -81,24 +115,26 @@ document.addEventListener("click", (e) => {
     /////////////////////////////////////////////////////////
     let closeNewTodoForm = e.target.closest("#newTodoCloseForm");
     if (closeNewTodoForm) {
+        domManager.toggleButtons();
         domManager.todoDomManager.closeNewTodoForm();
         return;
     }
 
     let submitNewTodoForm = e.target.closest("#newTodoConfirmForm");
-    if (submitNewTodoForm) {
+    if (submitNewTodoForm) {        
         const newTodoFields = domManager.todoDomManager.submitNewTodoForm(manager);
         const newTodo = manager.todoManager.addTodo(newTodoFields);
         domManager.todoDomManager.addTodoToDOM(manager, newTodo);
+        domManager.toggleButtons();
         return;
     };
     /////////////////////////////////////////////////////////
-
 
     // Edit Category
     /////////////////////////////////////////////////////////
     let openEditCategoryForm = e.target.closest(".editCategoryButton"); 
     if (openEditCategoryForm) {
+        domManager.toggleButtons();
         const categoryID = openEditCategoryForm.parentNode.parentNode.dataset.categoryID;
         const category = manager.categoryManager.getCategoryByID(categoryID);
         domManager.categoryDomManager.openCategoryEditForm(manager, category);
@@ -108,14 +144,20 @@ document.addEventListener("click", (e) => {
     let closeCategoryEditForm = e.target.closest("#editCategoryCloseForm"); 
     if (closeCategoryEditForm) {
         domManager.categoryDomManager.closeCategoryEditForm();
+        domManager.toggleButtons();
         return;   
     }
 
     let deleteCategoryEditForm = e.target.closest("#editCategoryDelete"); 
     if (deleteCategoryEditForm) {
         const categoryToDelete = domManager.categoryDomManager.getCategoryBeingEdited();
-        domManager.categoryDomManager.deleteCategoryEditForm();
-        manager.categoryManager.deleteCategory(categoryToDelete);
+        if (manager.categoryManager.canDelete(categoryToDelete, manager.todoManager.todos)) {
+            domManager.categoryDomManager.deleteCategoryEditForm();
+            manager.categoryManager.deleteCategory(categoryToDelete);
+        } else {
+            alert("Cannot Delete Category w/ Existing Todo's")
+        }
+        domManager.toggleButtons();
         return;   
     }
 
@@ -138,8 +180,19 @@ document.addEventListener("click", (e) => {
         manager.categoryManager.updateCategory(categoryBeingEdited, editedCategoryFields);
         domManager.todoDomManager.updateTodosAfterCategoryEdit(
             manager.todoManager.getTodosByCategoryID(categoryBeingEdited.categoryID));
+        domManager.toggleButtons();
         return;   
     }
+    /////////////////////////////////////////////////////////
+
+    // Help
+    /////////////////////////////////////////////////////////
+    let closeHelp = e.target.closest("#helpOverlayCloseButton");
+    if (closeHelp) {
+        domManager.closeHelp();
+        domManager.toggleButtons();
+        return;
+    };
     /////////////////////////////////////////////////////////
 });
 
@@ -149,7 +202,7 @@ document.addEventListener("submit", (e) => {
     e.preventDefault();
 
     let submitNewCategoryForm = e.target.id == "newCategoryNameForm"
-    if(submitNewCategoryForm) {
+    if (submitNewCategoryForm) {
         const name = document.forms.newCategoryNameForm["newCategoryName"].value;
         const validForm = name.length > 2 && name.length < 12; 
 
@@ -161,8 +214,14 @@ document.addEventListener("submit", (e) => {
             domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory(name));
             addCategoryButton.style.display = "block";
         }
+        domManager.toggleButtons();
     }
 });
+
+// Timed Fucntions
+///////////////////////////////////////////////////////////////////////////////
+//setInterval(domManager.todoDomManager.colorPastDue(manager.todoManager.todos), 5000);
+
 
 // Debug
 

@@ -23,12 +23,40 @@ const DomManager = () => {
         document.querySelector("#settingsButton").src = SettingsButton;
     };
 
+    let toggle = true;
+    const toggleButtons = () => {
+        toggle = !toggle;
+        let ptrEvents = toggle ? "auto" : "none";
+        document.querySelector("#addCategoryButton").style.pointerEvents = ptrEvents;
+        document.querySelector("#addToDoButton").style.pointerEvents = ptrEvents;
+        document.querySelector("#filterButton").style.pointerEvents = ptrEvents;
+        document.querySelector("#sortButton").style.pointerEvents = ptrEvents;
+        document.querySelector("#searchBar").style.pointerEvents = ptrEvents;
+        document.querySelector("#settingsButton").style.pointerEvents = ptrEvents;
+        document.querySelector("#helpButton").style.pointerEvents = ptrEvents;
+        const buttons = document.querySelectorAll(".editCategoryButton,.todoEditButton,.todoCheckButton,.todoNote");
+        buttons.forEach( (button) => {
+            button.style.pointerEvents = ptrEvents;
+        })
+    };
+
+    const openHelpMessage = () => {
+        document.querySelector("#helpOverlay").style.display = "flex";
+    };
+
+    const closeHelp = () => {
+        document.querySelector("#helpOverlay").style.display = "none";
+    };
+
     loadImageAssets();
 
     return {
         todoDomManager,
         categoryDomManager,
-        loadImageAssets
+        loadImageAssets,
+        toggleButtons,
+        openHelpMessage,
+        closeHelp
     }
 };
 

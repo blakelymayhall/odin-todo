@@ -8,7 +8,6 @@ const Manager = () => {
 
     const GetFormattedDate = (date) => {
         let formattedDate;
-
         if (isToday(date)) {
             formattedDate = "Today @ ";
         }
@@ -18,15 +17,23 @@ const Manager = () => {
         else {
             formattedDate = format(date, "eeee, MMM d @ ");
         }
-        
         formattedDate = formattedDate + format(date, "h:mm a");
         return formattedDate;
+    };
+
+    const loadState = () => {
+        todoManager.todos = JSON.parse(localStorage.getItem("todoList"));
+        categoryManager.categories = JSON.parse(localStorage.getItem("categoryList"));
+        // cut the colors and symbols that are not available -- category manager
+        // add categories and todos to dom -- respective managers
+        // if null load default config
     };
 
     return {
         todoManager,
         categoryManager,
-        GetFormattedDate
+        GetFormattedDate,
+        loadState
     }
 }
 

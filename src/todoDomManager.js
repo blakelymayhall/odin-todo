@@ -61,6 +61,12 @@ const TodoDomManager = () => {
         document.querySelector("#todoFullOverlay").style.background = todo.category.color;
         document.querySelector("#todoFullName").textContent = todo.name;
         document.querySelector("#todoFullDate").textContent = manager.GetFormattedDate(todo.dueDate);
+        if (todo.dueDate <= new Date()) {
+            document.querySelector("#todoFullDate").style.color = 'red';
+        }
+        else {
+            document.querySelector("#todoFullDate").style.color = 'black';
+        }
         document.querySelector("#todoFullDescription").textContent = todo.desc;
         document.querySelector("#todoFullCategory").textContent = todo.category.name;
         document.querySelector("#todoFullCategoryImg").src = todo.category.symbol;
@@ -72,12 +78,6 @@ const TodoDomManager = () => {
 
     const openNewTodoForm = (manager) => {
         document.querySelector("#newTodoOverlay").style.display = "flex";
-
-        // Disable buttons (make a function for this)
-        //
-        document.querySelector("#addCategoryButton").style.pointerEvents = "none";
-        //
-
         manager.categoryManager.categories.forEach( (category) => {
             const categoryOption = document.createElement("option");
             categoryOption.value=category.categoryID;
@@ -157,19 +157,13 @@ const TodoDomManager = () => {
             todoDOM.querySelector(".todoDateContent").textContent = manager.GetFormattedDate(newTodoDueDate);
             todoDOM.querySelector(".todoCategory").src = newTodoCategory.symbol;
             todoDOM.style.background = newTodoCategory.color;
-
-            // Re-enable clicks -- make function 
-            document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
-
             closeEditTodoForm();
-    
+
             return {
-                editedTodoFields: { 
-                    newTodoName, 
-                    newTodoDescription, 
-                    newTodoDueDate, 
-                    newTodoCategory
-                }
+                newTodoName, 
+                newTodoDescription, 
+                newTodoDueDate, 
+                newTodoCategory
             };
         }
 
@@ -191,7 +185,28 @@ const TodoDomManager = () => {
         todoDOM.parentNode.removeChild(todoDOM);
     };
 
-    function validTodoInput(newTodoName, newTodoDueDate, isEdit = false) {
+    const updateTodosAfterCategoryEdit = (todos) => {
+        todos.forEach( (todo) => {
+            const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
+            todoDOM.querySelector(".todoCategory").src = todo.category.symbol;
+            todoDOM.style.background = todo.category.color;
+        });
+    };
+
+    const colorPastDue = (todos) => {
+        todos.forEach( (todo) => {
+            const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
+            if (todo.dueDate <= new Date()) {
+                todoDOM.querySelector(".todoDateContent").style.color = 'red';
+            }
+            else {
+                todoDOM.querySelector(".todoDateContent").style.color = 'black';
+            }
+        });
+    };
+
+    // Support Functions
+    const validTodoInput = (newTodoName, newTodoDueDate, isEdit = false) => {
         const validName = newTodoName.length > 2 && newTodoName.length < 12; 
         if (!validName) {
           alert("Names must be between 2 and 12 characters");
@@ -208,14 +223,6 @@ const TodoDomManager = () => {
         return true;
     };
 
-    const updateTodosAfterCategoryEdit = (todos) => {
-        todos.forEach( (todo) => {
-            const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
-            todoDOM.querySelector(".todoCategory").src = todo.category.symbol;
-            todoDOM.style.background = todo.category.color;
-        });
-    };
-
     return {
         addTodoToDOM,
         showFullTodo,
@@ -228,7 +235,8 @@ const TodoDomManager = () => {
         submitEditTodoForm,
         closeEditTodoForm,
         deleteTodoViaEditForm,
-        updateTodosAfterCategoryEdit
+        updateTodosAfterCategoryEdit,
+        colorPastDue
     }
 };
 

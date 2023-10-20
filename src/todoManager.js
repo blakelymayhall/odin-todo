@@ -11,6 +11,7 @@ const TodoManager = () => {
             newTodoFields.newTodoCategory, 
             false);
         todos.push(newTodo);
+        localStorage.setItem("todoList", JSON.stringify(todos));
         return newTodo;
     };
 
@@ -19,6 +20,7 @@ const TodoManager = () => {
         todoBeingEdited.dueDate = editedTodoFields.newTodoDueDate
         todoBeingEdited.desc = editedTodoFields.newTodoDescription;
         todoBeingEdited.category = editedTodoFields.newTodoCategory;
+        localStorage.setItem("todoList", JSON.stringify(todos));
     };
 
     const deleteTodo = (todoToDelete) => {
@@ -26,6 +28,7 @@ const TodoManager = () => {
             return todo.todoID == todoToDelete;
         });
         todos.splice(todoIdx,1);
+        localStorage.setItem("todoList", JSON.stringify(todos));
     };
 
     const getTodoByID = (id) => {
