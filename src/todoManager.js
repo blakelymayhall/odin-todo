@@ -4,6 +4,12 @@ const TodoManager = () => {
 
     let todos = [];
 
+    const loadTodos = (loadedTodos) => {
+        loadedTodos.forEach( (todo) => {
+            todos.push(todo);
+        });
+    };
+
     const addTodo = (newTodoFields) => {
         let newTodo = Todo(newTodoFields.newTodoName, 
             newTodoFields.newTodoDescription, 
@@ -45,6 +51,7 @@ const TodoManager = () => {
 
     return {
         todos,
+        loadTodos,
         addTodo,
         updateTodo,
         deleteTodo,

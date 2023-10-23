@@ -7,31 +7,26 @@ import "./style/styles.css";
 const manager = Manager();
 const domManager = DomManager();
 
-manager.loadState();
+if (manager.loadState()) {
+    manager.categoryManager.categories.forEach( (category) => {
+        domManager.categoryDomManager.addCategoryToDOM(category);
+    });
+    manager.todoManager.todos.forEach( (todo) => {
+        domManager.todoDomManager.addTodoToDOM(manager, todo);
+    });
+} else {
+    domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Default"));
 
-domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Default"));
-domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Test"));
-domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Test2"));
-/*
-domManager.todoDomManager.addTodoToDOM(
-    manager, 
-    manager.todoManager.addTodo( {
-        newTodoName: "Click Me!",
-        newTodoDescription: "",
-        newTodoDueDate: new Date(),
-        newTodoCategory: manager.categoryManager.getCategoryByName("Default")}
-    )
-);
-domManager.todoDomManager.addTodoToDOM(
-    manager, 
-    manager.todoManager.addTodo( {
-        newTodoName: "Test!",
-        newTodoDescription: "Test This is a Test",
-        newTodoDueDate: new Date(),
-        newTodoCategory: manager.categoryManager.getCategoryByName("Test")}
-    )
-);
-*/
+    domManager.todoDomManager.addTodoToDOM(
+        manager, 
+        manager.todoManager.addTodo( {
+            newTodoName: "Click Me!",
+            newTodoDescription: "",
+            newTodoDueDate: new Date(),
+            newTodoCategory: manager.categoryManager.getCategoryByName("Default")}
+        )
+    );
+}
 
 // Click events
 /////////////////////////////////////////////////////////////////////////////
@@ -220,8 +215,7 @@ document.addEventListener("submit", (e) => {
 
 // Timed Fucntions
 ///////////////////////////////////////////////////////////////////////////////
-//setInterval(domManager.todoDomManager.colorPastDue(manager.todoManager.todos), 5000);
-
+setInterval(domManager.todoDomManager.colorPastDue(manager.todoManager.todos), 5000);
 
 // Debug
 

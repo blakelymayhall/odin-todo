@@ -15,12 +15,28 @@ const CategoryManager = () => {
 
     let categories = [];
 
+    const loadCategories = (loadedCategories) => {
+        loadedCategories.forEach( (category) => {
+            categories.push(category);
+            const colorIdx = categoryColors.indexOf( (color) => {
+                return color == category.color;
+            });
+            categoryImages.splice(colorIdx,1);
+
+            const imgIdx = categoryImages.indexOf( (img) => {
+                return img == category.symbol;
+            });
+            categoryImages.splice(imgIdx,1);
+        });
+    };
+
     const addCategory = (name) => {
         let rndIdx = Math.floor(Math.random()*categoryImages.length);
         let newCategory = Category(name, categoryColors[rndIdx], categoryImages[rndIdx]);
         categoryImages.splice(rndIdx,1);
         categoryColors.splice(rndIdx,1);
         categories.push(newCategory);
+
         localStorage.setItem("categoryList", JSON.stringify(categories));
         return newCategory;
     };
@@ -51,7 +67,7 @@ const CategoryManager = () => {
             categoryBeingEdited.symbol = categoryImages[editedCategoryFields.newCategorySymbolIndex];
             categoryImages.splice(categoryImages.indexOf(categoryBeingEdited.symbol),1);
         }
-        
+
         localStorage.setItem("categoryList", JSON.stringify(categories));
     };
 
@@ -72,6 +88,7 @@ const CategoryManager = () => {
         categoryImages.push(categoryToDelete.symbol);
         categoryColors.push(categoryToDelete.color);
         categories.splice(categoryIdx,1);
+
         localStorage.setItem("categoryList", JSON.stringify(categories));
     };
 
@@ -79,6 +96,7 @@ const CategoryManager = () => {
         categories,
         categoryImages,
         categoryColors,
+        loadCategories,
         addCategory,
         getCategoryByName,
         getCategoryByID,

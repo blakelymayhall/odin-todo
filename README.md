@@ -110,6 +110,9 @@ Repo for the todo list project in the javascript course of the Odin Project
 - Help button
 - Begin implementing data persistance 
 
+10/22/23
+- Made some progress in implementing data persistance. Really think using class could have made this easier
+
 Todo:
 - Move help to toolbarDomManager
 - Move addTodo to toolbarDomManager

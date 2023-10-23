@@ -7,6 +7,11 @@ const Manager = () => {
     const categoryManager = CategoryManager();
 
     const GetFormattedDate = (date) => {
+
+        if (typeof date === 'string' || date instanceof String) {
+            date = Date.parse(date);
+        }
+
         let formattedDate;
         if (isToday(date)) {
             formattedDate = "Today @ ";
@@ -22,11 +27,20 @@ const Manager = () => {
     };
 
     const loadState = () => {
-        todoManager.todos = JSON.parse(localStorage.getItem("todoList"));
-        categoryManager.categories = JSON.parse(localStorage.getItem("categoryList"));
-        // cut the colors and symbols that are not available -- category manager
-        // add categories and todos to dom -- respective managers
-        // if null load default config
+        //return false;
+        // Error check keys
+        let keys = ["todoList", "categoryList"]
+        keys.forEach( (key) => {
+            if (JSON.parse(localStorage.getItem(key)) == null) {
+                return false;
+            }
+        });
+
+        // Load keys
+        todoManager.loadTodos(JSON.parse(localStorage.getItem(keys[0])));
+        categoryManager.loadCategories(JSON.parse(localStorage.getItem(keys[1])));
+
+        return true;
     };
 
     return {

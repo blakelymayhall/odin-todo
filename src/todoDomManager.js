@@ -5,6 +5,7 @@ import TodoEditButton from "../src/imgs/icons8-edit-50.png";
 const TodoDomManager = () => {
     let todoBeingEdited = null;
 
+    // Export Functions
     const addTodoToDOM = (manager, todo) => {
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
@@ -91,7 +92,6 @@ const TodoDomManager = () => {
         const newTodoDescription = document.forms.newTodoOverlay["newTodoDescription"].value;
         const newTodoDueDate = new Date(document.forms.newTodoOverlay["newTodoDueDate"].value);
         const newTodoCategory = manager.categoryManager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
-
         if(validTodoInput(newTodoName, newTodoDueDate)) {
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
             document.querySelector("#newTodoOverlay").style.display = "none";
@@ -195,8 +195,13 @@ const TodoDomManager = () => {
 
     const colorPastDue = (todos) => {
         todos.forEach( (todo) => {
+            let dueDate = todo.dueDate;
+            if (typeof dueDate === 'string' || dueDate instanceof String) {
+                dueDate = Date.parse(dueDate);
+            }
+
             const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
-            if (todo.dueDate <= new Date()) {
+            if (dueDate <= new Date()) {
                 todoDOM.querySelector(".todoDateContent").style.color = 'red';
             }
             else {
