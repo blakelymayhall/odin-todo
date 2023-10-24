@@ -49,6 +49,10 @@ const TodoManager = () => {
         });
     };
 
+    const setTodoComplete = (todo) => {
+        todo.status = 1;
+    };
+
     return {
         todos,
         loadTodos,
@@ -56,12 +60,12 @@ const TodoManager = () => {
         updateTodo,
         deleteTodo,
         getTodoByID,
-        getTodosByCategoryID
-    }
-
+        getTodosByCategoryID,
+        setTodoComplete
+    };
 };
 
-const Todo = (name, desc, dueDate, category, status) => {
+const Todo = (name, desc, dueDate, category, status = 0) => {
 
     const todoID = genID();
 
@@ -72,7 +76,7 @@ const Todo = (name, desc, dueDate, category, status) => {
         dueDate,
         category,
         status
-    }
+    };
 };
 
 export {TodoManager, Todo}

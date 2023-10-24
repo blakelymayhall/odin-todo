@@ -4,9 +4,10 @@ import TodoEditButton from "../src/imgs/icons8-edit-50.png";
 
 const TodoDomManager = () => {
     let todoBeingEdited = null;
+    let todoOrderAdded = [];
 
     // Export Functions
-    const addTodoToDOM = (manager, todo) => {
+    const addTodoToDOM = (manager, todo) => {        
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
         todoNote.style.background = todo.category.color;
@@ -53,8 +54,15 @@ const TodoDomManager = () => {
         todoContent.appendChild(todoDateRow);
         todoContent.appendChild(todoCategory);
         todoNote.appendChild(todoContent);
-
         document.querySelector("#board").appendChild(todoNote);
+
+        const alreadyAdded = todoOrderAdded.find( (alreadyAddedTodo) => {
+            return alreadyAddedTodo.todoID == todo.todoID;
+        });
+
+        if (!alreadyAdded) {
+            todoOrderAdded.push(todo);
+        }
     };
 
     const showFullTodo = (manager, todo) => {
@@ -75,51 +83,6 @@ const TodoDomManager = () => {
 
     const closeFullTodo = () => {
         document.querySelector("#todoFullOverlay").style.display = "none";
-    };
-
-    const openNewTodoForm = (manager) => {
-        document.querySelector("#newTodoOverlay").style.display = "flex";
-        manager.categoryManager.categories.forEach( (category) => {
-            const categoryOption = document.createElement("option");
-            categoryOption.value=category.categoryID;
-            categoryOption.text=category.name;
-            document.querySelector("#newTodoCategory").appendChild(categoryOption);
-        });
-    };
-
-    const submitNewTodoForm = (manager) => {
-        const newTodoName = document.forms.newTodoOverlay["newTodoTitle"].value;
-        const newTodoDescription = document.forms.newTodoOverlay["newTodoDescription"].value;
-        const newTodoDueDate = new Date(document.forms.newTodoOverlay["newTodoDueDate"].value);
-        const newTodoCategory = manager.categoryManager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
-        if(validTodoInput(newTodoName, newTodoDueDate)) {
-            document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
-            document.querySelector("#newTodoOverlay").style.display = "none";
-            document.forms.newTodoOverlay.reset();
-            const toDelete = document.querySelectorAll("#newTodoCategory option")
-            toDelete.forEach((e) => {
-                e.parentElement.removeChild(e);
-            });
-            
-            return {
-                newTodoName, 
-                newTodoDescription, 
-                newTodoDueDate, 
-                newTodoCategory
-            };
-        }
-
-        return null;
-    }
-
-    const closeNewTodoForm = () => {
-        document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
-        document.querySelector("#newTodoOverlay").style.display = "none";
-        document.forms.newTodoOverlay.reset();
-        const toDelete = document.querySelectorAll("#newTodoCategory option")
-        toDelete.forEach((e) => {
-            e.parentElement.removeChild(e);
-        });
     };
 
     const getTodoBeingEdited = () => {
@@ -210,6 +173,36 @@ const TodoDomManager = () => {
         });
     };
 
+    const setTodoComplete = (todo) => {
+        const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
+        todoDOM.style.display = "none";
+    };
+
+    const sortTodos = (manager, sortSelection) => {
+        const todoNotes = document.querySelectorAll(".todoNote");
+        todoNotes.forEach( (todoNote) => {
+            todoNote.parentElement.removeChild(todoNote);
+        });
+
+        switch (sortSelection.textContent) {
+            case "Due Date":
+                let todoDateOrder = todoOrderAdded.slice();
+                todoDateOrder.sort( (a,b) => {
+                    return new Date(a.dueDate) - new Date(b.dueDate);
+                });
+                todoDateOrder.forEach( (todo) => {
+                    addTodoToDOM(manager, todo);
+                });
+                break;
+            case "Todo Name":
+                break;
+            default:
+                todoOrderAdded.forEach( (todo) => {
+                    addTodoToDOM(manager, todo);
+                });
+            }
+    }
+
     // Support Functions
     const validTodoInput = (newTodoName, newTodoDueDate, isEdit = false) => {
         const validName = newTodoName.length > 2 && newTodoName.length < 12; 
@@ -232,16 +225,15 @@ const TodoDomManager = () => {
         addTodoToDOM,
         showFullTodo,
         closeFullTodo,
-        openNewTodoForm,
-        submitNewTodoForm,
-        closeNewTodoForm,
         getTodoBeingEdited,
         openEditTodoForm,
         submitEditTodoForm,
         closeEditTodoForm,
         deleteTodoViaEditForm,
         updateTodosAfterCategoryEdit,
-        colorPastDue
+        colorPastDue,
+        setTodoComplete,
+        sortTodos
     }
 };
 

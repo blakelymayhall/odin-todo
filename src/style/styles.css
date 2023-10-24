@@ -122,6 +122,30 @@ ul {
     height: 100%;
 }
 
+.dropdownButton {
+    margin-top: 3px;
+}
+
+#sortButton-content, #filterButton-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+#sortButton-content p, #filterButton-content p {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+#sortButton-content p:hover, #filterButton-content p:hover {
+    background-color: #ddd;
+}
+
 #searchIcon {
     height: 40%;
     width: auto;
@@ -137,7 +161,7 @@ ul {
 }
 
 .toolBarButton {
-    height: 50%;
+    height: 32px;
     width: auto;
     object-fit: cover;
 }
@@ -341,6 +365,11 @@ ul {
     width: auto;
     object-fit: cover;
     margin-top: -10px;
+}
+
+.todoCheckButton:hover {
+    border-radius: 50%;
+    background-color: green;
 }
 
 .todoEditButton {

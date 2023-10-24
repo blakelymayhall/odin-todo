@@ -39,19 +39,42 @@ addCategoryButton.addEventListener("click", () => {
 const addTodoButton = document.querySelector("#addToDoButton");
 addTodoButton.addEventListener("click", () => {
     domManager.toggleButtons();
-    domManager.todoDomManager.openNewTodoForm(manager);
+    domManager.toolbarDomManager.openNewTodoForm(manager);
+});
+
+const sortButton = document.querySelector("#sortButton");
+sortButton.addEventListener("click", () => {
+    domManager.toggleButtons();
+    document.getElementById("sortButton-content").style.display = "block";
+});
+
+const filterButton = document.querySelector("#filterButton");
+filterButton.addEventListener("click", () => {
+    domManager.toggleButtons();
+    document.getElementById("filterButton-content").style.display = "block";
 });
 
 const helpButton = document.querySelector("#helpButton");
 helpButton.addEventListener("click", () => {
     domManager.toggleButtons();
-    domManager.openHelpMessage();
+    domManager.toolbarDomManager.openHelpMessage();
 });
 
 // Dynamic Click Events (for elements that are not always visible)
 /////////////////////////////////////////////////////////////////////////////
 document.addEventListener("click", (e) => {
     
+    // Todo Completed
+    /////////////////////////////////////////////////////////
+    let todoCompleted = e.target.closest(".todoCheckButton");
+    if (todoCompleted) {
+        const todo = manager.todoManager.getTodoByID(todoCompleted.parentNode.parentNode.dataset.todoID);
+        domManager.todoDomManager.setTodoComplete(todo);
+        manager.todoManager.setTodoComplete(todo);
+        return;
+    }
+    /////////////////////////////////////////////////////////
+
     // Edit Todo
     /////////////////////////////////////////////////////////
     let openEditTodoForm = e.target.closest(".todoEditButton");
@@ -111,13 +134,13 @@ document.addEventListener("click", (e) => {
     let closeNewTodoForm = e.target.closest("#newTodoCloseForm");
     if (closeNewTodoForm) {
         domManager.toggleButtons();
-        domManager.todoDomManager.closeNewTodoForm();
+        domManager.toolbarDomManager.closeNewTodoForm();
         return;
     }
 
     let submitNewTodoForm = e.target.closest("#newTodoConfirmForm");
     if (submitNewTodoForm) {        
-        const newTodoFields = domManager.todoDomManager.submitNewTodoForm(manager);
+        const newTodoFields = domManager.toolbarDomManager.submitNewTodoForm(manager);
         const newTodo = manager.todoManager.addTodo(newTodoFields);
         domManager.todoDomManager.addTodoToDOM(manager, newTodo);
         domManager.toggleButtons();
@@ -180,14 +203,38 @@ document.addEventListener("click", (e) => {
     }
     /////////////////////////////////////////////////////////
 
+    // Sort Button
+    /////////////////////////////////////////////////////////
+    if (!domManager.getButtonToggleState() && !e.target.closest("#sortButton-content p, #sortButton")) {
+        document.getElementById("sortButton-content").style.display = "none";
+        domManager.toggleButtons(); // THIS ONE AND THE FILTER ONE NEED TO BE ABOVE THE INITIAL CLICKS
+    }
+
+    let sortSelection = e.target.closest("#sortButton-content p");
+    if (sortSelection) {
+        domManager.todoDomManager.sortTodos(manager, sortSelection);
+        document.getElementById("sortButton-content").style.display = "none";
+        domManager.toggleButtons();
+        return;
+    }
+    /////////////////////////////////////////////////////////
+
+    // Filter Button
+    /////////////////////////////////////////////////////////
+    if (!domManager.getButtonToggleState() && !e.target.closest("#filterButton-content p, #filterButton")) {
+        document.getElementById("filterButton-content").style.display = "none";
+        domManager.toggleButtons(true);
+    }
+    /////////////////////////////////////////////////////////
+
     // Help
     /////////////////////////////////////////////////////////
     let closeHelp = e.target.closest("#helpOverlayCloseButton");
     if (closeHelp) {
-        domManager.closeHelp();
+        domManager.toolbarDomManager.closeHelp();
         domManager.toggleButtons();
         return;
-    };
+    }
     /////////////////////////////////////////////////////////
 });
 
@@ -215,7 +262,10 @@ document.addEventListener("submit", (e) => {
 
 // Timed Fucntions
 ///////////////////////////////////////////////////////////////////////////////
-setInterval(domManager.todoDomManager.colorPastDue(manager.todoManager.todos), 5000);
+setInterval(
+    function() {
+        domManager.todoDomManager.colorPastDue(manager.todoManager.todos) 
+    }, 1000);
 
 // Debug
 

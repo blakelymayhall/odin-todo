@@ -113,20 +113,24 @@ Repo for the todo list project in the javascript course of the Odin Project
 10/22/23
 - Made some progress in implementing data persistance. Really think using class could have made this easier
 
-Todo:
+10/23/22
+- Finish Make data persist
 - Move help to toolbarDomManager
 - Move addTodo to toolbarDomManager
-- Make data persist
-- Sort functionality - toolbarDomManager
-    - Sort by date 
-    - Sort by name 
+- Hover over completed and make green - css
 - Completed functionality
-    - Hover over and make green - css
     - Todo disappears on click - toolbarDomManager
-- Filter functionality - toolbarDomManager
-    - No filter
-    - Filter by category
-    - Filter by completed
+- Begin 
+    - Sort functionality - toolbarDomManager
+        - Sort by date 
+        - Sort by name 
+    - Filter functionality - toolbarDomManager
+        - No filter
+        - Filter by category
+        - Filter by completed
+
+Todo:
+- Fix search / filter to check for outside click prior to the initial click
 - Search functionality - toolbarDomManager
     - This is the same as filter but by name only 
 - Enforce unable to make new category if exceed numbr of images/colors - categoryManager

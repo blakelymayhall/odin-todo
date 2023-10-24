@@ -6,13 +6,15 @@ import SearchIcon from "../src/imgs/icons8-magnifying-glass-50.png";
 import HelpButton from "../src/imgs/icons8-help-50.png";
 import SettingsButton from "../src/imgs/icons8-settings-96.png";
 
+import { ToolbarDomManager } from "./toolbarDomManager";
 import { TodoDomManager } from "./todoDomManager";
 import { CategoryDomManager } from "./categoryDomManager";
 
 const DomManager = () => {
+    const toolbarDomManager = ToolbarDomManager();
     const todoDomManager = TodoDomManager();
     const categoryDomManager = CategoryDomManager();
-
+    
     const loadImageAssets = () => {
         document.querySelector("#addCategoryButton").src = AddCategoryButton;
         document.querySelector("#addToDoButton").src = AddToDoButton;
@@ -40,23 +42,19 @@ const DomManager = () => {
         })
     };
 
-    const openHelpMessage = () => {
-        document.querySelector("#helpOverlay").style.display = "flex";
-    };
-
-    const closeHelp = () => {
-        document.querySelector("#helpOverlay").style.display = "none";
-    };
+    const getButtonToggleState = () => {
+        return toggle;
+    }
 
     loadImageAssets();
 
     return {
+        toolbarDomManager,
         todoDomManager,
         categoryDomManager,
         loadImageAssets,
         toggleButtons,
-        openHelpMessage,
-        closeHelp
+        getButtonToggleState
     }
 };
 
