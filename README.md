@@ -129,13 +129,19 @@ Repo for the todo list project in the javascript course of the Odin Project
         - Filter by category
         - Filter by completed
 
-Todo:
+10/24/22
+- Add settings to the page settings - toolbarDomManager
+    - Clear data -- categoryManager / todoManager
 - Fix search / filter to check for outside click prior to the initial click
 - Search functionality - toolbarDomManager
     - This is the same as filter but by name only 
+- Refactor so todos dont hold full category
+- Various refactoring to fix data persistence
 - Enforce unable to make new category if exceed numbr of images/colors - categoryManager
-- Add settings to the page settings - toolbarDomManager
-    - Clear data -- categoryManager / todoManager
+
+Todo:
+- Defect scan, clean, and publish 
+
 
 Not Neccessary, but Nice:
 - Focus on input to allow tabbing

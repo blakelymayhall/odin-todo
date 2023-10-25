@@ -27,6 +27,7 @@ const DomManager = () => {
 
     let toggle = true;
     const toggleButtons = () => {
+        console.log("Toggled Buttons")
         toggle = !toggle;
         let ptrEvents = toggle ? "auto" : "none";
         document.querySelector("#addCategoryButton").style.pointerEvents = ptrEvents;
@@ -42,10 +43,6 @@ const DomManager = () => {
         })
     };
 
-    const getButtonToggleState = () => {
-        return toggle;
-    }
-
     loadImageAssets();
 
     return {
@@ -53,8 +50,7 @@ const DomManager = () => {
         todoDomManager,
         categoryDomManager,
         loadImageAssets,
-        toggleButtons,
-        getButtonToggleState
+        toggleButtons
     }
 };
 

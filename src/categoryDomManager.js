@@ -126,6 +126,8 @@ const CategoryDomManager = () => {
             }
 
             closeCategoryEditForm();
+            colorSelected = null;
+            symbolSelected = null;
             return {
                 newCategoryName: newCategoryName,
                 newCategoryColorIndex: newColorIndex,

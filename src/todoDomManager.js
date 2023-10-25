@@ -10,7 +10,9 @@ const TodoDomManager = () => {
     const addTodoToDOM = (manager, todo) => {        
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
-        todoNote.style.background = todo.category.color;
+        console.log(todo.categoryID)
+        console.log(manager.categoryManager.getCategoryByID(todo.categoryID))
+        todoNote.style.background = manager.categoryManager.getCategoryByID(todo.categoryID).color;
         todoNote.dataset.todoID = todo.todoID;
         const pushpin = document.createElement("img");
         pushpin.src = Pushpin;
@@ -41,7 +43,7 @@ const TodoDomManager = () => {
         todoDateContent.textContent = manager.GetFormattedDate(todo.dueDate);
         const todoCategory = document.createElement("img");
         todoCategory.classList.add("todoCategory");
-        todoCategory.src = todo.category.symbol;
+        todoCategory.src = manager.categoryManager.getCategoryByID(todo.categoryID).symbol;
 
         todoNote.appendChild(pushpin);
         todoTitleRow.appendChild(todoTitle);
@@ -67,7 +69,8 @@ const TodoDomManager = () => {
 
     const showFullTodo = (manager, todo) => {
         document.querySelector("#todoFullOverlay").style.display = "flex";
-        document.querySelector("#todoFullOverlay").style.background = todo.category.color;
+        document.querySelector("#todoFullOverlay").style.background = 
+            manager.categoryManager.getCategoryByID(todo.categoryID).color;
         document.querySelector("#todoFullName").textContent = todo.name;
         document.querySelector("#todoFullDate").textContent = manager.GetFormattedDate(todo.dueDate);
         if (todo.dueDate <= new Date()) {
@@ -77,8 +80,10 @@ const TodoDomManager = () => {
             document.querySelector("#todoFullDate").style.color = 'black';
         }
         document.querySelector("#todoFullDescription").textContent = todo.desc;
-        document.querySelector("#todoFullCategory").textContent = todo.category.name;
-        document.querySelector("#todoFullCategoryImg").src = todo.category.symbol;
+        document.querySelector("#todoFullCategory").textContent = 
+            manager.categoryManager.getCategoryByID(todo.categoryID).name;
+        document.querySelector("#todoFullCategoryImg").src = 
+            manager.categoryManager.getCategoryByID(todo.categoryID).symbol;
     };
 
     const closeFullTodo = () => {
@@ -95,13 +100,15 @@ const TodoDomManager = () => {
         document.querySelector("#editTodoOverlay").style.display = "flex";
         document.querySelector("#editTodoTitle").value = todoBeingEdited.name;
         document.querySelector("#editTodoDescription").value = todoBeingEdited.desc;
+        todoBeingEdited.dueDate = new Date(todoBeingEdited.dueDate);
         todoBeingEdited.dueDate.setMinutes(todoBeingEdited.dueDate.getMinutes() - todoBeingEdited.dueDate.getTimezoneOffset());
         document.querySelector("#editTodoDueDate").value = todoBeingEdited.dueDate.toISOString().slice(0,16);
+        console.log(manager.categoryManager.categories)
         manager.categoryManager.categories.forEach( (category) => {
             const categoryOption = document.createElement("option");
             categoryOption.value=category.categoryID;
             categoryOption.text=category.name;
-            if (category == todoBeingEdited.category) {
+            if (category.categoryID == todoBeingEdited.categoryID) {
                 categoryOption.selected = "selected";
             }
             document.querySelector("#editTodoCategory").appendChild(categoryOption);
@@ -112,21 +119,23 @@ const TodoDomManager = () => {
         const newTodoName = document.forms.editTodoOverlay["editTodoTitle"].value;
         const newTodoDescription = document.forms.editTodoOverlay["editTodoDescription"].value;
         const newTodoDueDate = new Date(document.forms.editTodoOverlay["editTodoDueDate"].value);
-        const newTodoCategory = manager.categoryManager.getCategoryByID(document.forms.editTodoOverlay["editTodoCategory"].value);
+        const newTodoCategoryID = document.forms.editTodoOverlay["editTodoCategory"].value;
 
         if(validTodoInput(newTodoName, newTodoDueDate, true)) {
             const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
             todoDOM.querySelector(".todoTitleContent").textContent = newTodoName;
             todoDOM.querySelector(".todoDateContent").textContent = manager.GetFormattedDate(newTodoDueDate);
-            todoDOM.querySelector(".todoCategory").src = newTodoCategory.symbol;
-            todoDOM.style.background = newTodoCategory.color;
+            todoDOM.querySelector(".todoCategory").src = 
+                manager.categoryManager.getCategoryByID(newTodoCategoryID).symbol;
+            todoDOM.style.background = 
+                manager.categoryManager.getCategoryByID(newTodoCategoryID).color;
             closeEditTodoForm();
 
             return {
                 newTodoName, 
                 newTodoDescription, 
                 newTodoDueDate, 
-                newTodoCategory
+                newTodoCategoryID
             };
         }
 
@@ -146,13 +155,19 @@ const TodoDomManager = () => {
         closeEditTodoForm();
         const todoDOM = document.querySelector(`[data-todo-i-d='${todoBeingEdited.todoID}']`);
         todoDOM.parentNode.removeChild(todoDOM);
+        const todoIdx = todoOrderAdded.indexOf( (todo) => {
+            return todo.todoID == todoBeingEdited.todoID;
+        });
+        todoOrderAdded.splice(todoIdx,1);
     };
 
-    const updateTodosAfterCategoryEdit = (todos) => {
+    const updateTodosAfterCategoryEdit = (manager, todos) => {
         todos.forEach( (todo) => {
             const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
-            todoDOM.querySelector(".todoCategory").src = todo.category.symbol;
-            todoDOM.style.background = todo.category.color;
+            todoDOM.querySelector(".todoCategory").src = 
+                manager.categoryManager.getCategoryByID(todo.categoryID).symbol;
+            todoDOM.style.background = 
+                manager.categoryManager.getCategoryByID(todo.categoryID).color;
         });
     };
 
@@ -164,6 +179,10 @@ const TodoDomManager = () => {
             }
 
             const todoDOM = document.querySelector(`[data-todo-i-d='${todo.todoID}']`);
+            if (todoDOM == null) {
+                return;
+            }
+
             if (dueDate <= new Date()) {
                 todoDOM.querySelector(".todoDateContent").style.color = 'red';
             }
@@ -191,17 +210,53 @@ const TodoDomManager = () => {
                     return new Date(a.dueDate) - new Date(b.dueDate);
                 });
                 todoDateOrder.forEach( (todo) => {
-                    addTodoToDOM(manager, todo);
+                    if (todo.status != 1) {
+                        addTodoToDOM(manager, todo);
+                    }
                 });
-                break;
-            case "Todo Name":
                 break;
             default:
                 todoOrderAdded.forEach( (todo) => {
-                    addTodoToDOM(manager, todo);
+                    if (todo.status != 1) {
+                        addTodoToDOM(manager, todo);
+                    }
                 });
-            }
-    }
+        }
+    };
+
+    const filterTodos = (manager, filterSelection) => {
+        const todoNotes = document.querySelectorAll(".todoNote");
+        todoNotes.forEach( (todoNote) => {
+            todoNote.parentElement.removeChild(todoNote);
+        });
+
+        if (filterSelection.textContent == "") {
+            filterSelection.textContent = "No Filter";
+        }
+
+        switch (filterSelection.textContent) {
+            case "No Filter":
+                todoOrderAdded.forEach( (todo) => {
+                    if (todo.status != 1) {
+                        addTodoToDOM(manager, todo);
+                    }
+                });
+                break;
+            case "Completed":
+                manager.todoManager.todos.forEach( (todo) => {
+                    if (todo.status == 1) {
+                        addTodoToDOM(manager, todo);
+                    }
+                });
+                break;
+            default:
+                manager.todoManager.todos.forEach( (todo) => {
+                    if (todo.status != 1 && todo.name.includes(filterSelection)) {
+                        addTodoToDOM(manager, todo);
+                    }
+                });
+        }
+    };
 
     // Support Functions
     const validTodoInput = (newTodoName, newTodoDueDate, isEdit = false) => {
@@ -233,7 +288,8 @@ const TodoDomManager = () => {
         updateTodosAfterCategoryEdit,
         colorPastDue,
         setTodoComplete,
-        sortTodos
+        sortTodos,
+        filterTodos
     }
 };
 

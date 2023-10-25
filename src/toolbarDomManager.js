@@ -1,4 +1,8 @@
+import { is } from "date-fns/locale";
+
 const ToolbarDomManager = () => {
+
+    let dropDownOpen = false;
 
     const openNewTodoForm = (manager) => {
         document.querySelector("#newTodoOverlay").style.display = "flex";
@@ -14,7 +18,7 @@ const ToolbarDomManager = () => {
         const newTodoName = document.forms.newTodoOverlay["newTodoTitle"].value;
         const newTodoDescription = document.forms.newTodoOverlay["newTodoDescription"].value;
         const newTodoDueDate = new Date(document.forms.newTodoOverlay["newTodoDueDate"].value);
-        const newTodoCategory = manager.categoryManager.getCategoryByID(document.forms.newTodoOverlay["newTodoCategory"].value);
+        const newTodoCategoryID = document.forms.newTodoOverlay["newTodoCategory"].value;
         if(validTodoInput(newTodoName, newTodoDueDate)) {
             document.querySelector("#addCategoryButton").style.pointerEvents = "auto";
             document.querySelector("#newTodoOverlay").style.display = "none";
@@ -28,10 +32,10 @@ const ToolbarDomManager = () => {
                 newTodoName, 
                 newTodoDescription, 
                 newTodoDueDate, 
-                newTodoCategory
+                newTodoCategoryID
             };
         }
-
+        
         return null;
     }
 
@@ -45,6 +49,14 @@ const ToolbarDomManager = () => {
         });
     };
 
+    const getDropDownOpen = () => {
+        return dropDownOpen;
+    }
+
+    const setDropDownOpen = (isOpen) => {
+        dropDownOpen = isOpen;
+    }
+
     const openHelpMessage = () => {
         document.querySelector("#helpOverlay").style.display = "flex";
     };
@@ -53,12 +65,42 @@ const ToolbarDomManager = () => {
         document.querySelector("#helpOverlay").style.display = "none";
     };
 
+    const openSettingsMenu = () => {
+        document.querySelector("#settingsMenu").style.display = "flex";
+    };
+
+    const closeSettingsMenu = () => {
+        document.querySelector("#settingsMenu").style.display = "none";
+    };
+
+    // Support Functions
+    const validTodoInput = (newTodoName, newTodoDueDate, isEdit = false) => {
+        const validName = newTodoName.length > 2 && newTodoName.length < 12; 
+        if (!validName) {
+            alert("Names must be between 2 and 12 characters");
+            return false;
+        }
+    
+        const validDate = newTodoDueDate != "" && newTodoDueDate != null && 
+            (new Date(newTodoDueDate) > new Date() || isEdit); // Check against current date
+        if (!validDate) {
+            alert("Date must be future date");
+            return false;
+        }
+    
+        return true;
+    };
+
     return {
         openNewTodoForm,
         submitNewTodoForm,
         closeNewTodoForm,
+        getDropDownOpen,
+        setDropDownOpen,
         openHelpMessage,
-        closeHelp
+        closeHelp,
+        openSettingsMenu,
+        closeSettingsMenu
     }
 };
 

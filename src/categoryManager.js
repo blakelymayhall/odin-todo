@@ -16,16 +16,12 @@ const CategoryManager = () => {
     let categories = [];
 
     const loadCategories = (loadedCategories) => {
+        console.log(loadedCategories)
         loadedCategories.forEach( (category) => {
             categories.push(category);
-            const colorIdx = categoryColors.indexOf( (color) => {
-                return color == category.color;
-            });
-            categoryImages.splice(colorIdx,1);
-
-            const imgIdx = categoryImages.indexOf( (img) => {
-                return img == category.symbol;
-            });
+            const colorIdx = categoryColors.indexOf(category.color);
+            categoryColors.splice(colorIdx,1);
+            const imgIdx = categoryImages.indexOf(category.symbol);
             categoryImages.splice(imgIdx,1);
         });
     };
@@ -74,7 +70,7 @@ const CategoryManager = () => {
     const canDelete = (categoryToDelete, todos) => {
         let canDelete = true;
         todos.forEach( (todo) => {
-            if (todo.category == categoryToDelete) {
+            if (todo.categoryID == categoryToDelete.categoryID) {
                 canDelete = false;
             }
         });
@@ -92,6 +88,10 @@ const CategoryManager = () => {
         localStorage.setItem("categoryList", JSON.stringify(categories));
     };
 
+    const canAdd = () => {
+        return categories.length <= categoryImages.length;
+    };
+
     return {
         categories,
         categoryImages,
@@ -102,7 +102,8 @@ const CategoryManager = () => {
         getCategoryByID,
         updateCategory,
         canDelete,
-        deleteCategory
+        deleteCategory,
+        canAdd
     };
 };
 

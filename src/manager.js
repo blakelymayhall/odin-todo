@@ -27,19 +27,23 @@ const Manager = () => {
     };
 
     const loadState = () => {
-        //return false;
         // Error check keys
+        let loadErr = false;
         let keys = ["todoList", "categoryList"]
         keys.forEach( (key) => {
             if (JSON.parse(localStorage.getItem(key)) == null) {
-                return false;
+                loadErr = true;
             }
         });
 
-        // Load keys
-        todoManager.loadTodos(JSON.parse(localStorage.getItem(keys[0])));
-        categoryManager.loadCategories(JSON.parse(localStorage.getItem(keys[1])));
+        if (loadErr) {
+            return false;
+        }
 
+        // Load keys
+        categoryManager.loadCategories(JSON.parse(localStorage.getItem(keys[1])));
+        todoManager.loadTodos(JSON.parse(localStorage.getItem(keys[0])));
+        
         return true;
     };
 

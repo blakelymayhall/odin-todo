@@ -5,6 +5,7 @@ const TodoManager = () => {
     let todos = [];
 
     const loadTodos = (loadedTodos) => {
+        console.log(loadedTodos)
         loadedTodos.forEach( (todo) => {
             todos.push(todo);
         });
@@ -14,7 +15,7 @@ const TodoManager = () => {
         let newTodo = Todo(newTodoFields.newTodoName, 
             newTodoFields.newTodoDescription, 
             newTodoFields.newTodoDueDate, 
-            newTodoFields.newTodoCategory, 
+            newTodoFields.newTodoCategoryID, 
             false);
         todos.push(newTodo);
         localStorage.setItem("todoList", JSON.stringify(todos));
@@ -25,7 +26,7 @@ const TodoManager = () => {
         todoBeingEdited.name = editedTodoFields.newTodoName;
         todoBeingEdited.dueDate = editedTodoFields.newTodoDueDate
         todoBeingEdited.desc = editedTodoFields.newTodoDescription;
-        todoBeingEdited.category = editedTodoFields.newTodoCategory;
+        todoBeingEdited.categoryID = editedTodoFields.newTodoCategoryID;
         localStorage.setItem("todoList", JSON.stringify(todos));
     };
 
@@ -45,12 +46,13 @@ const TodoManager = () => {
 
     const getTodosByCategoryID = (id) => {
         return todos.filter( (todo) => {
-            return todo.category.categoryID == id;
+            return todo.categoryID == id;
         });
     };
 
     const setTodoComplete = (todo) => {
         todo.status = 1;
+        localStorage.setItem("todoList", JSON.stringify(todos));
     };
 
     return {
@@ -65,7 +67,7 @@ const TodoManager = () => {
     };
 };
 
-const Todo = (name, desc, dueDate, category, status = 0) => {
+const Todo = (name, desc, dueDate, categoryID, status = 0) => {
 
     const todoID = genID();
 
@@ -74,7 +76,7 @@ const Todo = (name, desc, dueDate, category, status = 0) => {
         name,
         desc,
         dueDate,
-        category,
+        categoryID,
         status
     };
 };

@@ -8,13 +8,17 @@ const manager = Manager();
 const domManager = DomManager();
 
 if (manager.loadState()) {
+    console.log("Loading Data");
     manager.categoryManager.categories.forEach( (category) => {
         domManager.categoryDomManager.addCategoryToDOM(category);
     });
     manager.todoManager.todos.forEach( (todo) => {
-        domManager.todoDomManager.addTodoToDOM(manager, todo);
+        if (todo.status != 1) {
+            domManager.todoDomManager.addTodoToDOM(manager, todo);
+        }
     });
 } else {
+    console.log("Loading Default");
     domManager.categoryDomManager.addCategoryToDOM(manager.categoryManager.addCategory("Default"));
 
     domManager.todoDomManager.addTodoToDOM(
@@ -23,8 +27,8 @@ if (manager.loadState()) {
             newTodoName: "Click Me!",
             newTodoDescription: "",
             newTodoDueDate: new Date(),
-            newTodoCategory: manager.categoryManager.getCategoryByName("Default")}
-        )
+            newTodoCategoryID: manager.categoryManager.getCategoryByName("Default").categoryID
+        })
     );
 }
 
@@ -32,8 +36,10 @@ if (manager.loadState()) {
 /////////////////////////////////////////////////////////////////////////////
 const addCategoryButton = document.querySelector("#addCategoryButton");
 addCategoryButton.addEventListener("click", () => {
-    domManager.toggleButtons();
-    domManager.categoryDomManager.getNewCategory();
+    if (manager.categoryManager.canAdd()) {
+        domManager.toggleButtons();
+        domManager.categoryDomManager.getNewCategory();
+    }
 });
 
 const addTodoButton = document.querySelector("#addToDoButton");
@@ -45,12 +51,14 @@ addTodoButton.addEventListener("click", () => {
 const sortButton = document.querySelector("#sortButton");
 sortButton.addEventListener("click", () => {
     domManager.toggleButtons();
+    domManager.toolbarDomManager.setDropDownOpen(true);
     document.getElementById("sortButton-content").style.display = "block";
 });
 
 const filterButton = document.querySelector("#filterButton");
 filterButton.addEventListener("click", () => {
     domManager.toggleButtons();
+    domManager.toolbarDomManager.setDropDownOpen(true);
     document.getElementById("filterButton-content").style.display = "block";
 });
 
@@ -60,10 +68,48 @@ helpButton.addEventListener("click", () => {
     domManager.toolbarDomManager.openHelpMessage();
 });
 
+const settingsButton = document.querySelector("#settingsButton");
+settingsButton.addEventListener("click", () => {
+    domManager.toggleButtons();
+    domManager.toolbarDomManager.openSettingsMenu();
+});
+
+
 // Dynamic Click Events (for elements that are not always visible)
 /////////////////////////////////////////////////////////////////////////////
 document.addEventListener("click", (e) => {
     
+    // Sort/Filter Button
+    /////////////////////////////////////////////////////////
+    let didNotClickSortFilter = 
+        !e.target.closest("#filterButton-content p, #filterButton, #sortButton-content p, #sortButton");    
+    if (domManager.toolbarDomManager.getDropDownOpen() && didNotClickSortFilter) {
+        document.getElementById("sortButton-content").style.display = "none";
+        document.getElementById("filterButton-content").style.display = "none";
+        domManager.toolbarDomManager.setDropDownOpen(false);
+        domManager.toggleButtons();
+        return;
+    }
+
+    let sortSelection = e.target.closest("#sortButton-content p");
+    if (sortSelection) {
+        domManager.todoDomManager.sortTodos(manager, sortSelection);
+        document.getElementById("sortButton-content").style.display = "none";
+        domManager.toolbarDomManager.setDropDownOpen(false);
+        domManager.toggleButtons();
+        return;
+    }
+
+    let filterSelection = e.target.closest("#filterButton-content p");
+    if (filterSelection) {
+        domManager.todoDomManager.filterTodos(manager, filterSelection);
+        document.getElementById("filterButton-content").style.display = "none";
+        domManager.toolbarDomManager.setDropDownOpen(false);
+        domManager.toggleButtons();
+        return;
+    }
+    /////////////////////////////////////////////////////////
+
     // Todo Completed
     /////////////////////////////////////////////////////////
     let todoCompleted = e.target.closest(".todoCheckButton");
@@ -141,6 +187,9 @@ document.addEventListener("click", (e) => {
     let submitNewTodoForm = e.target.closest("#newTodoConfirmForm");
     if (submitNewTodoForm) {        
         const newTodoFields = domManager.toolbarDomManager.submitNewTodoForm(manager);
+        if (newTodoFields == null) {
+            return;
+        }
         const newTodo = manager.todoManager.addTodo(newTodoFields);
         domManager.todoDomManager.addTodoToDOM(manager, newTodo);
         domManager.toggleButtons();
@@ -196,34 +245,12 @@ document.addEventListener("click", (e) => {
         const categoryBeingEdited = domManager.categoryDomManager.getCategoryBeingEdited();
         const editedCategoryFields = domManager.categoryDomManager.submitCategoryEditForm();
         manager.categoryManager.updateCategory(categoryBeingEdited, editedCategoryFields);
-        domManager.todoDomManager.updateTodosAfterCategoryEdit(
+        console.log(categoryBeingEdited.categoryID)
+        console.log(manager.todoManager.getTodosByCategoryID(categoryBeingEdited.categoryID))
+        domManager.todoDomManager.updateTodosAfterCategoryEdit(manager,
             manager.todoManager.getTodosByCategoryID(categoryBeingEdited.categoryID));
         domManager.toggleButtons();
         return;   
-    }
-    /////////////////////////////////////////////////////////
-
-    // Sort Button
-    /////////////////////////////////////////////////////////
-    if (!domManager.getButtonToggleState() && !e.target.closest("#sortButton-content p, #sortButton")) {
-        document.getElementById("sortButton-content").style.display = "none";
-        domManager.toggleButtons(); // THIS ONE AND THE FILTER ONE NEED TO BE ABOVE THE INITIAL CLICKS
-    }
-
-    let sortSelection = e.target.closest("#sortButton-content p");
-    if (sortSelection) {
-        domManager.todoDomManager.sortTodos(manager, sortSelection);
-        document.getElementById("sortButton-content").style.display = "none";
-        domManager.toggleButtons();
-        return;
-    }
-    /////////////////////////////////////////////////////////
-
-    // Filter Button
-    /////////////////////////////////////////////////////////
-    if (!domManager.getButtonToggleState() && !e.target.closest("#filterButton-content p, #filterButton")) {
-        document.getElementById("filterButton-content").style.display = "none";
-        domManager.toggleButtons(true);
     }
     /////////////////////////////////////////////////////////
 
@@ -236,6 +263,23 @@ document.addEventListener("click", (e) => {
         return;
     }
     /////////////////////////////////////////////////////////
+
+    // Settings
+    /////////////////////////////////////////////////////////
+    let closeSettings = e.target.closest("#settingsMenuClose");
+    if (closeSettings) {
+        domManager.toolbarDomManager.closeSettingsMenu();
+        domManager.toggleButtons();
+        return;
+    }
+
+    let clearMemory = e.target.closest("#settingsMenuClear");
+    if (clearMemory) {
+        localStorage.clear();
+        location.reload();
+        return;
+    }
+    /////////////////////////////////////////////////////////
 });
 
 // Dynamic Forms (For forms that are not alwyas visible)
@@ -243,7 +287,7 @@ document.addEventListener("click", (e) => {
 document.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    let submitNewCategoryForm = e.target.id == "newCategoryNameForm"
+    let submitNewCategoryForm = e.target.id == "newCategoryNameForm";
     if (submitNewCategoryForm) {
         const name = document.forms.newCategoryNameForm["newCategoryName"].value;
         const validForm = name.length > 2 && name.length < 12; 
@@ -257,6 +301,12 @@ document.addEventListener("submit", (e) => {
             addCategoryButton.style.display = "block";
         }
         domManager.toggleButtons();
+    }
+
+    let search = e.target.id == "search";
+    if (search) {
+        const searchTerm = document.forms.search["searchBar"].value;
+        domManager.todoDomManager.filterTodos(manager, searchTerm);
     }
 });
 
@@ -272,8 +322,10 @@ setInterval(
 ///////////////////////////////////////////////////////////////////////////////
 function doSomething() {
     //console.log(domManager.todoDomManager.getTodoBeingEdited())
-    //console.log(manager.categoryManager.categories)
-    //console.log(manager.todoManager.todos)
+    console.log("categories & todos")
+    console.log(manager.categoryManager.categories)
+    console.log(manager.todoManager.todos)
+    console.log("--------")
 }
 
-setInterval(doSomething, 5000); // Time in milliseconds
+setInterval(doSomething, 10000); // Time in milliseconds
