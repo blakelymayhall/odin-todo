@@ -16,7 +16,6 @@ const CategoryManager = () => {
     let categories = [];
 
     const loadCategories = (loadedCategories) => {
-        console.log(loadedCategories)
         loadedCategories.forEach( (category) => {
             categories.push(category);
             const colorIdx = categoryColors.indexOf(category.color);

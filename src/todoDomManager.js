@@ -10,8 +10,6 @@ const TodoDomManager = () => {
     const addTodoToDOM = (manager, todo) => {        
         const todoNote = document.createElement("div");
         todoNote.classList.add("todoNote");
-        console.log(todo.categoryID)
-        console.log(manager.categoryManager.getCategoryByID(todo.categoryID))
         todoNote.style.background = manager.categoryManager.getCategoryByID(todo.categoryID).color;
         todoNote.dataset.todoID = todo.todoID;
         const pushpin = document.createElement("img");
@@ -27,9 +25,15 @@ const TodoDomManager = () => {
         const todoTitleContent = document.createElement("p");
         todoTitleContent.classList.add("todoTitleContent");
         todoTitleContent.textContent = todo.name;
-        const todoCheckButton = document.createElement("img");
-        todoCheckButton.classList.add("todoCheckButton");
-        todoCheckButton.src = CheckMark;
+        let todoCheckButton = document.createElement("img");
+        if (!todo.status) {
+            todoCheckButton = document.createElement("img");
+            todoCheckButton.classList.add("todoCheckButton");
+            todoCheckButton.src = CheckMark;
+        } else {
+            todoCheckButton = document.createElement("div");
+            todoCheckButton.classList.add("todoCheckButtonPH");
+        }
         const todoEditButton = document.createElement("img");
         todoEditButton.classList.add("todoEditButton");
         todoEditButton.src = TodoEditButton;
@@ -103,7 +107,6 @@ const TodoDomManager = () => {
         todoBeingEdited.dueDate = new Date(todoBeingEdited.dueDate);
         todoBeingEdited.dueDate.setMinutes(todoBeingEdited.dueDate.getMinutes() - todoBeingEdited.dueDate.getTimezoneOffset());
         document.querySelector("#editTodoDueDate").value = todoBeingEdited.dueDate.toISOString().slice(0,16);
-        console.log(manager.categoryManager.categories)
         manager.categoryManager.categories.forEach( (category) => {
             const categoryOption = document.createElement("option");
             categoryOption.value=category.categoryID;

@@ -379,6 +379,11 @@ ul {
     margin-top: -10px;
 }
 
+.todoCheckButtonPH {
+    width: 30px;
+    height: 30px;
+}
+
 .todoCheckButton:hover {
     border-radius: 50%;
     background-color: green;
@@ -398,7 +403,7 @@ ul {
     grid-row-end: 4;
 }
 
-.todoCheckButton {
+.todoCheckButton, .todoCheckButtonPH  {
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 2;

@@ -40,7 +40,7 @@ const DomManager = () => {
         const buttons = document.querySelectorAll(".editCategoryButton,.todoEditButton,.todoCheckButton,.todoNote");
         buttons.forEach( (button) => {
             button.style.pointerEvents = ptrEvents;
-        })
+        });
     };
 
     loadImageAssets();

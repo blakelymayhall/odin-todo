@@ -5,7 +5,6 @@ const TodoManager = () => {
     let todos = [];
 
     const loadTodos = (loadedTodos) => {
-        console.log(loadedTodos)
         loadedTodos.forEach( (todo) => {
             todos.push(todo);
         });
@@ -46,7 +45,7 @@ const TodoManager = () => {
 
     const getTodosByCategoryID = (id) => {
         return todos.filter( (todo) => {
-            return todo.categoryID == id;
+            return todo.categoryID == id && todo.status == 0;
         });
     };
 

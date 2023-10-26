@@ -245,8 +245,6 @@ document.addEventListener("click", (e) => {
         const categoryBeingEdited = domManager.categoryDomManager.getCategoryBeingEdited();
         const editedCategoryFields = domManager.categoryDomManager.submitCategoryEditForm();
         manager.categoryManager.updateCategory(categoryBeingEdited, editedCategoryFields);
-        console.log(categoryBeingEdited.categoryID)
-        console.log(manager.todoManager.getTodosByCategoryID(categoryBeingEdited.categoryID))
         domManager.todoDomManager.updateTodosAfterCategoryEdit(manager,
             manager.todoManager.getTodosByCategoryID(categoryBeingEdited.categoryID));
         domManager.toggleButtons();
@@ -321,11 +319,10 @@ setInterval(
 
 ///////////////////////////////////////////////////////////////////////////////
 function doSomething() {
-    //console.log(domManager.todoDomManager.getTodoBeingEdited())
-    console.log("categories & todos")
-    console.log(manager.categoryManager.categories)
-    console.log(manager.todoManager.todos)
-    console.log("--------")
+    //console.log("categories & todos")
+    //console.log(manager.categoryManager.categories)
+    //console.log(manager.todoManager.todos)
+    //console.log("--------")
 }
 
 setInterval(doSomething, 10000); // Time in milliseconds
