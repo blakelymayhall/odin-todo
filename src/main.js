@@ -9,7 +9,7 @@ window.mobileCheck = function() {
   return check;
 };
 
-if (!window.mobileCheck()) {
+if (true) {//!window.mobileCheck()) {
   document.getElementById("mainContainer").style.display = "grid";
   document.getElementById("mobileProtector").style.display = "none";
 } else {
