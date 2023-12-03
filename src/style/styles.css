@@ -14,7 +14,7 @@ ul {
 }
 
 #mainContainer {
-    display: grid;
+    display: none;
     width: 100vw;
     height: 100vh;
     grid-template-columns: max(18vw,260px) 82vw;
@@ -432,4 +432,16 @@ ul {
 .symbolPickerIcon {
     width: 35px;
     height: 35px;
+}
+
+#mobileProtector {
+    margin-top: 10vh;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+}
+
+#mobileProtectorOveride {
+    margin-top: 40vh;
+    padding: 2%;
 }

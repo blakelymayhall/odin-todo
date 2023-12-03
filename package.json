@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "css-loader": "^6.8.1",
+    "eslint": "^8.53.0",
     "install": "^0.13.0",
     "npm": "^10.1.0",
     "style-loader": "^3.3.3",
