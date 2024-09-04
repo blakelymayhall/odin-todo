@@ -263,9 +263,9 @@ const TodoDomManager = () => {
 
     // Support Functions
     const validTodoInput = (newTodoName, newTodoDueDate, isEdit = false) => {
-        const validName = newTodoName.length > 2 && newTodoName.length < 12; 
+        const validName = newTodoName.length > 2 && newTodoName.length < 24; 
         if (!validName) {
-          alert("Names must be between 2 and 12 characters");
+          alert("Names must be between 2 and 24 characters");
           return false;
         }
     
